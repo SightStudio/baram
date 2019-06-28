@@ -7,50 +7,66 @@
 <template>
   <f7-page>
 
-    <f7-block class="radio-wrapper">
-      <f7-block>
-        <label class="isSmoker">
-          <img src="@/assets/image/user/smoker.png" alt="비흡연자">
-          <input type="radio" name="isSmoker" value="smoker">
-          <p class="bottom">흡연자</p>
-        </label>
-
-        <label class="isSmoker">
-          <img src="@/assets/image/user/nonSmoker.png" alt="비흡연자">
-          <input type="radio" name="isSmoker" value="nonSmoker">
-          <p class="bottom">비흡연자</p>
-        </label>
-      </f7-block>
-    </f7-block>
+    <logo></logo>
 
     <f7-list>
       <f7-list-input
-        label="E-mail"
-        type="text"
-        placeholder="E-mail을 입력해주세요"
-        clear-button
-      > </f7-list-input>
+				label="아이디"
+				type="text"
+				placeholder="Your name"
+				info="Default validation"
+				required
+				validate
+				clear-button
+			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+			</f7-list-input>
 
-      <f7-list-input
-        label="Name"
-        type="text"
-        placeholder="Your name"
-        clear-button
-      > </f7-list-input>
+			<f7-list-input
+				label="Fruit"
+				type="text"
+				placeholder="Type 'apple' or 'banana'"
+				required
+				validate
+				pattern="apple|banana"
+				clear-button
+			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+			  <span slot="info">Pattern validation (<b>apple|banana</b>)</span>
+			</f7-list-input>
 
-      <f7-list-input
-        label="Name"
-        type="text"
-        placeholder="Your name"
-        clear-button
-      > </f7-list-input>
+			<f7-list-input
+				label="E-mail"
+				type="email"
+				placeholder="Your e-mail"
+				info="Default e-mail validation"
+				required
+				validate
+				clear-button
+			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+			</f7-list-input>
 
-      <f7-list-input
-        label="Name"
-        type="text"
-        placeholder="Your name"
-        clear-button
-      > </f7-list-input>
+			<f7-list-input
+				label="URL"
+				type="url"
+				placeholder="Your URL"
+				info="Default URL validation"
+				required
+				validate
+				clear-button
+			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+			</f7-list-input>
+
+			<f7-list-input
+				label="Number"
+				type="text"
+				placeholder="Enter number"
+				info="With custom error message"
+				error-message="Only numbers please!"
+				required
+				validate
+				pattern="[0-9]*"
+				clear-button
+			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+			</f7-list-input>
       
     </f7-list>
 
@@ -65,12 +81,15 @@
 </template>
 
 <script>
-export default {}
+import logo from '{COMPONENT}/logo/logo.vue'
+export default {
+  components : {
+    logo
+  },
+}
 </script>
 <style scoped>
-.radio-wrapper {margin : 20px 0; text-align: center;}
-.radio-wrapper .isSmoker{ display : inline-block; width: 49%;} 
-.radio-wrapper .isSmoker input {display:none;}
-.radio-wrapper .isSmoker img {width : 90%;}
-.radio-wrapper .isSmoker .bottom {text-align: center; font-size: 2em; font-weight: bold;}
+.logo { width: 100%; height: 200px; text-align: center; font-size: 0; margin-top: 30px; }
+.logo img{ width: 100%; height:200px; display: inline-block; }
+
 </style>

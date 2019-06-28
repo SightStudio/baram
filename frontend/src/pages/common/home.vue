@@ -38,7 +38,6 @@
 
       <f7-row>
         <f7-col>
-          <!-- <f7-button fill raised href="/gmap">로그인 없이 시작</f7-button> -->
           <f7-button fill raised href="/main">로그인 없이 시작</f7-button>
         </f7-col>
       </f7-row>
@@ -66,7 +65,7 @@ export default {
 }
 </script>
 <style scoped>
-  .index { background: center / contain no-repeat url("~@/assets/image/common/bg_home.jpg");}
+  /* .index { background: center / contain no-repeat url("~@/assets/image/common/bg_home.jpg");} */
   .index .block-strong {background-color: transparent; border:none; padding-top: 0 ; margin-top: 10px;}
   .index .block-strong .row{margin-top: 25px;}
   .index .login-form {background-color: transparent; margin: 0;}

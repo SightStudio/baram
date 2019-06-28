@@ -1,16 +1,43 @@
 <template>
-  <f7-page>
-    <f7-navbar title="About" back-link="Back"></f7-navbar>
-    <f7-block-title>About My App</f7-block-title>
-    <f7-block strong>
-      <p>Here is About page!</p>
-      <p>You can go <f7-link back>back</f7-link>.</p>
-      <p>Mauris posuere sit amet metus id venenatis. Ut ante dolor, tempor nec commodo rutrum, varius at sem. Nullam ac nisi non neque ornare pretium. Nulla mauris mauris, consequat et elementum sit amet, egestas sed orci. In hac habitasse platea dictumst.</p>
-      <p>Fusce eros lectus, accumsan eget mi vel, iaculis tincidunt felis. Nulla tincidunt pharetra sagittis. Fusce in felis eros. Nulla sit amet aliquam lorem, et gravida ipsum. Mauris consectetur nisl non sollicitudin tristique. Praesent vitae metus ac quam rhoncus mattis vel et nisi. Aenean aliquet, felis quis dignissim iaculis, lectus quam tincidunt ligula, et venenatis turpis risus sed lorem. Morbi eu metus elit. Ut vel diam dolor.</p>
-    </f7-block>
-  </f7-page>
+    <f7-page class="user-singin">
+		
+		<f7-navbar title="로그인 하기"></f7-navbar>
+		
+		<logo></logo>
+
+		<f7-list no-hairlines>
+
+			<f7-list-input
+				label="아이디"
+				type="text"
+				placeholder="Your name"
+				info="Default validation"
+				required
+				validate
+				clear-button
+			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+			</f7-list-input>
+
+			<f7-list-input
+				label="Fruit"
+				type="text"
+				placeholder="Type 'apple' or 'banana'"
+				required
+				validate
+				pattern="apple|banana"
+				clear-button
+			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+			  <span slot="info">Pattern validation (<b>apple|banana</b>)</span>
+			</f7-list-input>
+		</f7-list>
+    </f7-page>
 </template>
 
 <script>
-export default {}
+import logo from '{COMPONENT}/logo/logo.vue'
+export default { 
+    components : {
+    logo
+  },
+}
 </script>

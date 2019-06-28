@@ -60,6 +60,7 @@
     </f7-page>
 </template>
 <script>
+
 /* 지도 관련 API */
 import Gmap          from  '{PAGE}/main/gmap/gmap.vue';
 import RegisterMap   from  '{PAGE}/main/register/smoke-register.vue'

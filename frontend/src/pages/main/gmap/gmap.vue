@@ -3,16 +3,29 @@
 -->
 <template>
   <f7-page>
-    <f7-toolbar no-hairline>
-      <f7-button color="black">
-         <!-- <f7-link icon-ios="f7:reload" icon-aurora="f7:reload"></f7-link> -->
-         <f7-icon f7="home"></f7-icon>
-      </f7-button>
+      <f7-row no-gap>
+        <f7-col width="15">
+          <f7-button color="black" panel-open="left">
+            <f7-icon f7="menu"></f7-icon>
+          </f7-button>
+        </f7-col>
 
-      <f7-button panel-open="right" color="black">
-        <f7-icon f7="menu"></f7-icon>
-      </f7-button>
-    </f7-toolbar> <!-- navbar END -->
+        <f7-col width="70">
+          <f7-searchbar
+            placeholder="위치 검색"
+            :disable-button="false"
+            :clear-button="false"
+            :custom-search="true"
+            :no-shadow="false"
+          ></f7-searchbar>
+        </f7-col>
+
+        <f7-col width="15">
+          <f7-button color="black">
+            <f7-icon f7="home"></f7-icon>
+          </f7-button>
+        </f7-col>
+      </f7-row> <!-- navbar END -->
     
     <f7-block id="map-container">
 
@@ -169,8 +182,6 @@ export default {
 .gnb { background-color : transparent; text-align: right; }
 .location-info-wrapper { margin-top: -33px; margin: 0; padding: 0;}
 .location-info-wrapper .location-info-header { margin-bottom: 15px; margin: 0; padding: 0;}
-
-/* .location-info-wrapper .location-info-header .location-search-type { text-align: right;} */
 
 .location-info-sheet {height:50%; --f7-sheet-bg-color: #fff !important;}
 .location-info-sheet .location-info{border: 2px solid blue; margin: 10px 0}

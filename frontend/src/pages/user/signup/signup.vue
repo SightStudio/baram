@@ -2,12 +2,8 @@
     <f7-page>
         
         <f7-block class="singup-wrapper">
-            <f7-link back>
-                <f7-icon f7="rewind_fill"></f7-icon>
-            </f7-link>
-            <f7-block class="logo">
-                <img src="@/assets/image/common/logo.png" alt="">
-            </f7-block>
+
+            <logo></logo>
 
             <f7-button 
                 fill 
@@ -32,11 +28,14 @@
 </template>
 
 <script>
-export default { }
+import logo from '{COMPONENT}/logo/logo.vue'
+export default { 
+    components : {
+    logo
+  },
+}
 </script>
 
 <style scoped>
     .singup-wrapper { width: 100%; height:100%; }
-    .singup-wrapper .logo { width: 90%; height: 200px; text-align: center; font-size: 0; margin-top: 30px;}
-    .singup-wrapper .logo img{ width: 100%; height:200px; display: inline-block;}
 </style>
