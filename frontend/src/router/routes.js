@@ -38,7 +38,7 @@ export default [
   },
   {
     path: '/user/signin',
-    component: Signup,
+    component: Signin,
     comment: '회원 로그인'
   },
   {
