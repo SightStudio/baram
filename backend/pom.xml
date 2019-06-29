@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.common</groupId>
-	<artifactId>sight</artifactId>
+	<artifactId>baram</artifactId>
 	<name>baram</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
@@ -254,8 +254,8 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<url>http://13.124.73.181/manager/text</url>
-					<path>/</path>
+					<url>http://13.125.250.76/manager/text</url>
+					<path>/api</path>
 					<username>sight</username>
     				<password>bksul40</password>
 					<update>true</update>
