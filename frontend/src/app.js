@@ -29,9 +29,5 @@ Vue.prototype.$http = axios;
 new Vue({
   el: '#app',
   template: '<app/>',
-
-  // Register App Component
-  components: {
-    app: App
-  }
+  components: { app: App }
 });
