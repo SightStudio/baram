@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
  * @since	2019.02.09
  */
 @Component
-public class CommonLog implements InitializingBean{
+public class CLog implements InitializingBean{
 	
 		private Logger log;        
 		
 		@Override
 		public void afterPropertiesSet() throws Exception {
-			this.log = LoggerFactory.getLogger(CommonLog.class);
+			this.log = LoggerFactory.getLogger(CLog.class);
 		}
 		
 		/**
