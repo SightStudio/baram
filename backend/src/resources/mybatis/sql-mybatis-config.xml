@@ -3,13 +3,13 @@
 
 <configuration>
 	<settings>
-		<setting name="cacheEnabled" value="true" />
-		<setting name="mapUnderscoreToCamelCase" value="true" />
-		<setting name="logImpl" value="SLF4J" />
+		<setting name="logImpl" value="SLF4J"/>
+		<setting name="cacheEnabled" value="true"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings>
 	
     <typeAliases> 
-        <typeAlias type="com.common.collection.CommonVO"     alias="commonVO"/>
-        <typeAlias type="com.common.collection.CommonVOList" alias="commonVOList"/>
+        <typeAlias alias="commonVO"     type="com.common.collection.CommonVO"/>
+        <typeAlias alias="commonVOList" type="com.common.collection.CommonVOList"/>
     </typeAliases>
 </configuration>

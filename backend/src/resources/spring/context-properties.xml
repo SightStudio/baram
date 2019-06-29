@@ -11,6 +11,6 @@
 		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
 	
-	<!-- 프로퍼티 객체화 설정하기 -->
+	<!-- 프로퍼티 객체화 설정 -->
 	<util:properties id="common" location="classpath:/properties/common.properties"/>
 </beans>
