@@ -2,7 +2,7 @@ package com.common.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.common.collection.CommonLog;
+import com.common.collection.CLog;
 
 /**
  * Service Layer 공통 클래스
@@ -10,8 +10,8 @@ import com.common.collection.CommonLog;
  * @author Dong-Min Seol
  * @since  2019.05.04
  */
-public class CommonService{
+public class BaseService{
 	
 	@Autowired
-	protected CommonLog log;
+	protected CLog log;
 }

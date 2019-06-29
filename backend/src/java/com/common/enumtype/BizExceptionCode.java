@@ -8,7 +8,6 @@ import java.util.Arrays;
  * </pre>
  * 
  * @author 	Dong-Min Seol
- * @version 1.0
  * @since  2019.02.23
  */
 public enum BizExceptionCode {

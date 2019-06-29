@@ -22,8 +22,7 @@ public class CommonDaoImpl implements CommonDaoIF{
 	SqlSessionTemplate sqlSession;
 	
 	@Override
-	public int insert(String mapperId, CommonVO param) 
-	{
+	public int insert(String mapperId, CommonVO param){
 		return sqlSession.insert(mapperId, param);
 	}
 

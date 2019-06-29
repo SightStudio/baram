@@ -1,10 +1,10 @@
 package com.common.collection;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -92,8 +92,17 @@ public class CommonVO extends HashMap<String, Object> {
 	 * @author Dong-Min Seol
 	 * @since  2019.04.01
 	 */
-	public String toJson() throws IOException {
+	public String toJson() {
+		
+		String result = "";
 		ObjectMapper mapper = new ObjectMapper();
-		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+
+		try {
+			result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 }

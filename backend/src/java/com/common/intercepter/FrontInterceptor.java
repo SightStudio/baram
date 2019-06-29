@@ -12,6 +12,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.common.collection.CommonVO;
 
+
 /**
  * Controller 호출 전 Handler를 통해 
  * 로그인 처리, VO 세팅 등 공통작업을 수행하는 인터셉터
@@ -56,7 +57,7 @@ public class FrontInterceptor extends HandlerInterceptorAdapter {
 		vo.put("requestMethod", req.getMethod());     	 // Client가 요청한 Method (GET, POST, PUT, DELETE)
 		
 		// [4] 세팅된 VO request 영역에 저장 후 Controller로 전송
-		req.setAttribute("defaultVO", vo);
+		req.setAttribute("param", vo);
 		
 		return true;
 	}
@@ -65,13 +66,13 @@ public class FrontInterceptor extends HandlerInterceptorAdapter {
 	/**
 	 * <pre> 
 	 *  사용자의 IP를 가져오는 메서드
-	 *  리버스 프록시 처리된 IP 가 있을 경우와 아닌 경우로 나눠서 처리
+	 *  웹서버를 경유하여 왔을 경우[리버스 프록시], 따로 웹서버에서 넘겨준 헤더에서 IP를 가져옴  
 	 * </pre>
 	 * 
 	 * @author  Dong-Min Seol
 	 * @since   2019.05.03  
-	 */
-	public String getIP (HttpServletRequest req) {
+	 */ 
+	private String getIP (HttpServletRequest req) {
 		
 		return Optional.ofNullable(req.getHeader("X-Forwarded-For"))
 					   .orElse(req.getRemoteAddr());
