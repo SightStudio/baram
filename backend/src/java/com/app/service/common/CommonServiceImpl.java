@@ -15,8 +15,16 @@ public class CommonServiceImpl extends BaseService
 	@Autowired
 	CommonDaoIF dao;
 	
+	/**
+	 * <pre>
+	 *     Exception Handling 용 테스트 메서드 
+	 * </pre>
+	 * @author Dong-Min-Seol
+	 * @since  2019. 6. 30.
+	 */
 	@Override
-	public CommonVO exceptionTest(CommonVO param) throws Exception{
+	public CommonVO exceptionTest(CommonVO param) throws Exception {
+		
 		// [1] 결과 코드 및 container 세팅
 		CommonVO result = new CommonVO();
 		

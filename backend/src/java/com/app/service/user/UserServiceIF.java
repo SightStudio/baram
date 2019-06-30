@@ -4,9 +4,7 @@ import com.common.collection.CommonVO;
 
 public interface UserServiceIF {
 	
-	public CommonVO signup(CommonVO param);
+	public CommonVO signup(CommonVO param) throws Exception;
 	
-	public CommonVO login(CommonVO param);
-	
-	public CommonVO logout(CommonVO param);
+	public CommonVO login(CommonVO param)  throws Exception;
 }
