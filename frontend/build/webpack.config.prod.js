@@ -1,12 +1,12 @@
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack              = require('webpack');
+const CopyWebpackPlugin    = require('copy-webpack-plugin');
+const VueLoaderPlugin      = require('vue-loader/lib/plugin');
+const HtmlWebpackPlugin    = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
-const path = require('path');
+const OptimizeCSSPlugin    = require('optimize-css-assets-webpack-plugin')
+const UglifyJsPlugin       = require('uglifyjs-webpack-plugin')
+const TerserPlugin         = require('terser-webpack-plugin')
+const path                 = require('path');
 
 function resolvePath(dir) {
   return path.join(__dirname, '..', dir);
@@ -25,8 +25,8 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      '@': resolvePath('src'),
+      'vue$' : 'vue/dist/vue.esm.js',
+      '@'    :  resolvePath('src'),
     }
   },
   devServer: {
@@ -109,14 +109,25 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': JSON.stringify('production'),
     }),
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        compress: {
-          warnings: false
-        }
+    // new UglifyJsPlugin({
+    //   uglifyOptions: {warnings: false},
+    //   sourceMap: true,
+    //   parallel: true
+    // }),
+    new TerserPlugin({
+      cache: true,
+      parallel: true,
+      terserOptions: {
+          warnings: false,
+          compress: {
+              warnings: false,
+              unused: true,
+          },
+          ecma: 6,
+          mangle: true,
+          unused: true,
       },
       sourceMap: true,
-      parallel: true
     }),
     new OptimizeCSSPlugin({
       cssProcessorOptions: {
@@ -144,7 +155,7 @@ module.exports = {
     }),
     new CopyWebpackPlugin([{
       from: resolvePath('static'),
-      to: resolvePath('www/static'),
+      to  : resolvePath('www/static'),
     }]),
   ]
 }

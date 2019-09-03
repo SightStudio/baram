@@ -24,6 +24,7 @@ module.exports = {
         "alias": {
           "{SERVICE}"   : "./src/services",
           "{COMPONENT}" : "./src/components",
+          "{STORE}"     : "./src/store",
           "{PAGE}"      : "./src/pages",
           "{ROUTE}"     : "./src/router",
           "{UTIL}"      : "./src/util",

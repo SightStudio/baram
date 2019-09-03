@@ -5,10 +5,12 @@
     @since  2019.05.10
 -->
 <template>
-    <f7-page class="intro">
+    <f7-page class="intro"
+             @page:mounted="onAutoPlay"
+             @page:beforeout="offAutoPlay">
         
         <f7-swiper pagination 
-                   :params="{speed:700, loop: true, slidesPerView: 1, spaceBetween: 0, autoplay: {delay: 4000 }}"
+                   :params="swiperConfig"
                    class="intro-swiper">
             <f7-swiper-slide>
                 <img src="@/assets/image/intro/slide1.jpg" alt="">
@@ -25,14 +27,23 @@
         </f7-swiper>
 
         <f7-segmented no-gap class="intro-nav">
-            <f7-button href="/index" large fill color="green" >시작</f7-button>
-            <f7-button href="/user/signin" large fill>로그인</f7-button>
-            <f7-button href="/user/signup" large fill color="gray">회원가입</f7-button>
+            <f7-button href="/gmap" color="green" large fill>시작</f7-button>
+            <f7-button href="/user/login"         large fill>로그인</f7-button>
         </f7-segmented>
     </f7-page>
 </template>
 <script>
-    export default {}
+    export default {
+        data(){
+            return {
+                swiperConfig : {speed:700, loop: true, slidesPerView: 1, spaceBetween: 0, autoplay: {delay: 4000}}
+            }
+        },
+        methods : {
+            onAutoPlay()  { this.swiperConfig.autoplay = {delay: 4000}; },
+            offAutoPlay() { this.swiperConfig.autoplay = false; }
+        },
+    }
 </script>
 <style scoped>
     .intro-swiper{width: 100%; height: 94%; }

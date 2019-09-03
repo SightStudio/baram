@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.mapper.userSmoke">
+	
+	<!-- 사용자 등록 구역 가져오기 -->
+	<select id="getUserSmokeList" parameterType="commonVO" resultType="commonVO">
+	<![CDATA[
+	  	SELECT
+			US.SMOKE_SEQ    as SMOKE_SEQ,
+			U.ID            as USER_ID,
+		    UR.RANK_NAME    as RANK_NAME,
+			US.TYPE 	    as TYPE,
+			US.LATITUDE     as LATITUDE,
+			US.LONGITUDE    as LONGITUDE,
+			US.TITLE 	    as AREA_NAME,
+			US.CONTENT 	    as CONTENT,
+			IFNULL(USI.IMG_SRC, 'no-image') as IMG_SRC,
+			DATE_FORMAT(US.REG_TIME,'%Y-%m-%d %H:%i:%s') as REG_TIME
+		FROM    TB_USER_SMOKE US
+			JOIN TB_USER U
+				USING(USER_SEQ)
+		    JOIN TB_USER_RANK UR
+				USING(USER_RANK_SEQ)
+			LEFT JOIN ( SELECT SMOKE_SEQ, IMG_SRC FROM TB_USER_SMOKE_IMAGE WHERE SEQ = 1 ) USI 
+				ON USI.SMOKE_SEQ = US.SMOKE_SEQ
+		WHERE   LATITUDE  BETWEEN #{sw_lat} AND #{ne_lat}
+			AND LONGITUDE BETWEEN #{sw_lng} AND #{ne_lng}
+	]]>
+		<choose>
+			<when test='somkeType == "smoke"'>
+				AND TYPE = 'smoke'
+			</when>
+			<when test='somkeType == "non-smoke"'>
+				AND TYPE = 'non-smoke'
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 일주일 전에 추가 한 사용자 등록 구역 가져오기 -->
+	<select id="getRecentSmokeCNT" parameterType="commonVO" resultType="commonVO">
+	<![CDATA[
+	  	SELECT  
+	  			COUNT(*) as RECENT_SMOKE_CNT
+	  	
+		FROM    TB_USER_SMOKE US
+		WHERE US.REG_TIME > DATE_ADD(now(), interval -#{day} day) 
+		ORDER BY REG_TIME
+	]]>
+	</select>
+	
+	<!-- 일주일 전에 추가 한 사용자 등록 구역 가져오기 -->
+	<select id="getRecentSmokeList" parameterType="commonVO" resultType="commonVO">
+	<![CDATA[
+	  	SELECT
+			US.SMOKE_SEQ    				as SMOKE_SEQ,
+			U.ID               			    as USER_ID,
+			US.TYPE 	                    as TYPE,
+			US.LATITUDE                     as LATITUDE,
+			US.LONGITUDE                    as LONGITUDE,
+			US.TITLE 	                    as TITLE,
+			IFNULL(USI.IMG_SRC, 'no-image') as IMG_SRC,
+			DATE_FORMAT(US.REG_TIME,'%Y-%m-%d %H:%i:%s') as REG_TIME
+		FROM    TB_USER_SMOKE US
+			JOIN TB_USER U
+				USING(USER_SEQ)
+			LEFT JOIN ( SELECT SMOKE_SEQ, IMG_SRC FROM TB_USER_SMOKE_IMAGE WHERE SEQ = 1 ) USI 
+				ON USI.SMOKE_SEQ = US.SMOKE_SEQ
+		WHERE US.REG_TIME > DATE_ADD(now(), interval -7 day) 
+		ORDER BY REG_TIME
+		LIMIT #{page_start}, #{page_end}
+	]]>
+	</select>
+	
+	
+	<!-- 사용자 지정 구역 첨부 이미지 가져오기 -->
+	<select id="getUserSmokeImageList" parameterType="commonVO" resultType="commonVO">
+	<![CDATA[
+		SELECT 
+				SMOKE_IMG_SEQ  as SMOKE_IMG_SEQ,
+				SMOKE_SEQ      as SMOKE_SEQ,
+				SEQ            as SEQ,
+				IMG_SRC        as IMG_SRC,
+				REG_TIME       as REG_TIME
+		FROM 
+				TB_USER_SMOKE_IMAGE
+		WHERE  
+				SMOKE_SEQ = #{smoke_seq}
+		ORDER BY SEQ
+	]]>
+	</select>
+	
+	<!-- 사용자 지정 구역 등록  -->
+    <insert id="registerArea" parameterType="commonVO">
+    <![CDATA[
+    	INSERT INTO TB_USER_SMOKE 
+    		(USER_SEQ, TYPE, TITLE, LATITUDE, LONGITUDE, CONTENT, REG_TIME)
+		VALUES
+			(#{USER_SEQ}, #{type}, #{title}, #{latitude}, #{longitude}, #{content}, now())
+    ]]>
+    	<selectKey resultType="integer" keyProperty="SMOKE_SEQ" order="AFTER">
+		    SELECT LAST_INSERT_ID()
+		</selectKey>
+    </insert>
+    
+    <!-- 사용자 지정구역 첨부이미지 가져오기  -->
+	<insert id="registerAreaImage" parameterType="commonVO">
+    <![CDATA[
+    	INSERT INTO TB_USER_SMOKE_IMAGE (SMOKE_SEQ, SEQ, IMG_SRC, REG_TIME)
+			   VALUES
+	]]>
+		<foreach collection="imgList" index="idx" item="imgSrc" separator=",">
+		<![CDATA[
+           	( #{SMOKE_SEQ}, #{idx}+1 , #{imgSrc}, now() )
+       	]]>
+        </foreach>
+    </insert>
+    
+</mapper>

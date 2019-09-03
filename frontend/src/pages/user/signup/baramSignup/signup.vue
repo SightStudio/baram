@@ -6,74 +6,103 @@
 -->
 <template>
   <f7-page>
+    <f7-appbar>
+		<div class="left">
+			<f7-button color="black" back>
+				<f7-icon material="arrow_back"></f7-icon>
+			</f7-button>
+		</div>
+
+		<div class="left">
+			<p> 회원 가입 </p>
+		</div>
+
+		<div class="right">
+			<f7-button color="black">
+				<f7-icon f7="home"></f7-icon>
+			</f7-button>
+		</div>
+	</f7-appbar> <!-- navbar END -->
 
     <logo></logo>
 
     <f7-list>
-      <f7-list-input
-				label="아이디"
-				type="text"
-				placeholder="Your name"
-				info="Default validation"
-				required
-				validate
-				clear-button
-			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-			</f7-list-input>
+		<f7-list-input
+			name="id"
+			label="아이디"
+			type="text"
+			placeholder="id"
+			required
+			validate
+			clear-button
+			:value="id"
+    		@input="id = $event.target.value"
+		> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+		</f7-list-input>
 
-			<f7-list-input
-				label="Fruit"
-				type="text"
-				placeholder="Type 'apple' or 'banana'"
-				required
-				validate
-				pattern="apple|banana"
-				clear-button
-			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-			  <span slot="info">Pattern validation (<b>apple|banana</b>)</span>
-			</f7-list-input>
+		<f7-list-input
+			name="pw"
+			label="비밀번호"
+			type="password"
+			placeholder="pw"
+			info="Default pw validation"
+			required
+			validate
+			clear-button
+			:value="pw"
+    		@input="pw = $event.target.value"
+		> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+		</f7-list-input>
 
-			<f7-list-input
-				label="E-mail"
-				type="email"
-				placeholder="Your e-mail"
-				info="Default e-mail validation"
-				required
-				validate
-				clear-button
-			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-			</f7-list-input>
+		<f7-list-input
+			name="email"
+			label="E-mail"
+			type="email"
+			placeholder="Your e-mail"
+			info="Default e-mail validation"
+			required
+			validate
+			clear-button
+			:value="email"
+    		@input="email = $event.target.value"
+		> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+		</f7-list-input>
 
-			<f7-list-input
-				label="URL"
-				type="url"
-				placeholder="Your URL"
-				info="Default URL validation"
-				required
-				validate
-				clear-button
-			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-			</f7-list-input>
+		<f7-list-input
+			name="phone_num"
+			label="핸드폰 번호"
+			type="text"
+			placeholder="핸드폰 번호____"
+			info="- 없이 숫자만 적어주세요"
+			pattern="[0-9]*"
+			error-message="숫자만 적어주세요"
+			required
+			validate
+			clear-button
+			:value="phone_num"
+    		@input="phone_num = $event.target.value"
+		> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+		</f7-list-input>
 
-			<f7-list-input
-				label="Number"
-				type="text"
-				placeholder="Enter number"
-				info="With custom error message"
-				error-message="Only numbers please!"
-				required
-				validate
-				pattern="[0-9]*"
-				clear-button
-			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-			</f7-list-input>
-      
+		<f7-list-input
+			name="name"
+			label="이름"
+			type="text"
+			placeholder="이름......"
+			info="With custom error message"
+			required
+			validate
+			clear-button
+			:value="name"
+    		@input="name = $event.target.value"
+		> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
+		</f7-list-input>
     </f7-list>
 
     <f7-block strong no-hairlines-ios>
       <f7-row>
         <f7-col>
-          <f7-button fill raised>회원 가입하기</f7-button>
+          <f7-button fill raised @click="submit">회원 가입하기</f7-button>
         </f7-col>
       </f7-row>
     </f7-block>
@@ -86,6 +115,39 @@ export default {
   components : {
     logo
   },
+  data() {
+	  return {
+		id        : '',
+		pw        : '',
+		name      : '',
+		email     : '',
+		phone_num : '',
+	  }
+  },
+  methods : {
+	submit : function() {
+
+		let data = new URLSearchParams();
+		data.append('id'       , this.id);
+		data.append('pw'       , this.pw);
+		data.append('name'     , this.name);
+		data.append('email'    , this.email);
+		data.append('phone_num', this.phone_num);
+
+		this.$http.post('api/user/signin', data)
+			.then ( (res) => {
+				let response = res.data.response
+				let REPL_MSG = REPL_CD == '000000' ? '회원가입에 성공하였습니다' :
+												     '회원가입에 실패하였습니다. 확인해주세요'
+				
+				this.$f7.dialog.alert(REPL_MSG, '로그인', () => {
+					if(REPL_CD == '000000') {
+						this.$f7router.navigate('/user/login', { clearPreviousHistory : true })
+					}
+				})
+			})
+	  }
+  }
 }
 </script>
 <style scoped>

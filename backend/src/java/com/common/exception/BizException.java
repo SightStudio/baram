@@ -1,5 +1,7 @@
 package com.common.exception;
 
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
 /**
  * 공통 비즈니스 로직 Exception Class
  * @author  Dong-Min Seol
@@ -12,11 +14,10 @@ public class BizException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	// 최종 error message
-	private String errMsg = "";
+	protected String errMsg = "";
 	
 	// 최종 error code
-	private String errCode = "";
-	
+	protected String errCode = "";
 	
 	/**
 	 * <pre>
@@ -27,21 +28,17 @@ public class BizException extends Exception {
      * @author  Dong-Min Seol
      * @since	2019.02.03
 	 */
-	public BizException() {
-		super();
-	}
+	public BizException() { super(); }
 	
 	public BizException(String errCode, String errMsg) {
 		this.errCode = errCode;
-		this.errMsg = errMsg;
-	}
-
-	public String getErrMsg() {
-		return errMsg;
-	}
-
-	public String getErrCode() {
-		return errCode;
+		this.errMsg  = errMsg;
 	}
 	
+	public void forceRollBack() {
+		TransactionAspectSupport.currentTransactionStatus().isRollbackOnly();
+	}
+	
+	public String getErrMsg()  { return errMsg;  }
+	public String getErrCode() { return errCode; }
 }

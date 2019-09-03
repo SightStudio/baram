@@ -8,8 +8,13 @@
     <userPannel></userPannel>
 
     <!-- Main View -->
-    <f7-view id="main-view" url="/" main class="safe-areas"></f7-view>
-
+    <f7-view 
+        main
+        id="main-view"
+        url="/"
+        class="safe-areas"
+        :iosSwipeBack="false"
+    ></f7-view>
   </f7-app>
 </template>
 
@@ -20,12 +25,12 @@ import userPannel from '{PAGE}/user/pannel/user-pannel.vue'
 export default {
   data() {
     return {
-      // Framework7 parameters here
+
       f7params: {
-        id   : 'io.framework7.testapp', // App bundle ID
+        id   : 'sight.spa.baram', // App bundle ID
         name : 'Framework7',            // App name
         theme: 'ios',                   // Automatic theme detection
-
+        
         // App routes
         routes: routes,
       },

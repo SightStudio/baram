@@ -42,11 +42,12 @@ public class CommonDaoImpl implements CommonDaoIF{
 	}
 	
 	@Override
-	public CommonVOList<CommonVO> selectList(String mapperId, CommonVO param) {
-		CommonVOList<CommonVO> result = new CommonVOList<>();
-		List<CommonVO> list = sqlSession.selectList(mapperId, param);
-		
-		result.addAll(list);
-		return result;
+	public List<CommonVO> selectList(String mapperId, CommonVO param) {
+		return sqlSession.selectList(mapperId, param);
+	}
+	
+	@Override
+	public CommonVOList<CommonVO> selectCommonVOList(String mapperId, CommonVO param) {
+		return new CommonVOList<>(sqlSession.selectList(mapperId, param));
 	}
 }

@@ -17,22 +17,11 @@ public class HomeController extends BaseController {
 	CommonServiceIF service;
 	
 	@GetMapping("index")
-	public ModelAndView home(@ModelAttribute("param") CommonVO param) 
+	public ModelAndView home(@ModelAttribute("request") CommonVO param) 
 	{
 		ModelAndView mav = new ModelAndView("home");
-		mav.addObject("param", param);
+		mav.addObject("request" , param);
 		
-		return mav;
-	}
-	
-	@GetMapping("index/{msg}")
-	public ModelAndView homeRest(@ModelAttribute("param") CommonVO param) throws Exception 
-	{
-		ModelAndView mav = new ModelAndView("jsonView");
-		CommonVO result = service.exceptionTest(param);
-		
-		mav.addObject("param", param);
-		mav.addObject("result", result);
 		return mav;
 	}
 }

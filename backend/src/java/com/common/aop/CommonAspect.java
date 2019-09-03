@@ -1,25 +1,34 @@
 package com.common.aop;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 import com.common.collection.CLog;
 import com.common.collection.CommonVO;
+import com.common.config.NoLogging;
 import com.common.enumtype.BizExceptionCode;
 import com.common.exception.BizException;
 
 @Component
 @Aspect
-public class CommonAspect {
+public class CommonAspect implements Ordered {
 	
 	@Autowired
 	CLog log;
-
+	
+	@Override
+	public int getOrder() {
+		return 1;
+	}
+	
 	/**
 	 * <pre>
 	 *     공통 AOP aspect, 모든 서비스 레이어의 비즈니스 로직과 시스템 예외는 이곳에서 처리한다.
@@ -31,8 +40,25 @@ public class CommonAspect {
 	 * @since  2019. 6. 30.
 	 */
 	@Around("execution(public * com.app.service..*.*(..))")
-	public CommonVO aroundMethod(ProceedingJoinPoint pjp) {
-		Signature sig = pjp.getSignature();
+	public CommonVO commonServiceMethodAspect(ProceedingJoinPoint pjp) {
+		
+		// [pre] JoinPoint 메서드 정보 추출
+		Signature       sig    = pjp.getSignature();
+		MethodSignature mSig   = (MethodSignature) pjp.getSignature();
+		Method          method = mSig.getMethod();
+		String      methodName = pjp.getSignature().getName();
+		
+		// [pre] 메서드에 적용된 custom annotation을 가져오기 위한 처리
+		if (method.getDeclaringClass().isInterface()) {
+		    try {
+				method = pjp.getTarget().getClass().getDeclaredMethod(methodName, method.getParameterTypes());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// [pre] 로깅 스킵 애너테이션이 있는지 확인
+		NoLogging noLog = method.getAnnotation(NoLogging.class);
 		
 		long startTime = System.currentTimeMillis();
 		long endTime   = 0;
@@ -42,9 +68,17 @@ public class CommonAspect {
 		String REPL_MSG = "정상";
 		CommonVO result = null;
 		
-		log.i("========================= 서비스 로직 START =============================");
-		log.i("호출 서비스명 : " + sig.toString());
-		log.i("파라미터: "     + Arrays.toString(pjp.getArgs()));
+		if(noLog != null) {
+			if(noLog.inScuuess() == false) {
+				log.i("========================= 서비스 로직 START =============================");
+				log.i("호출 서비스명 : " + sig.toString());
+				log.i("파라미터: "     + Arrays.toString(pjp.getArgs()));
+			}	
+		} else {
+			log.i("========================= 서비스 로직 START =============================");
+			log.i("호출 서비스명 : " + sig.toString());
+			log.i("파라미터: "     + Arrays.toString(pjp.getArgs()));
+		}
 		
 		try {
 			
@@ -56,8 +90,13 @@ public class CommonAspect {
 			result   = new CommonVO();
 			REPL_CD  = biz.getErrCode();
 			REPL_MSG = biz.getErrMsg();
-			log.e(biz.getMessage());
-			
+			if(noLog != null) {
+				if(noLog.inException() == false) {
+					log.e(biz.getMessage());
+				}
+			} else {
+				log.e(biz.getMessage());
+			}
 		} catch (Exception e) {
 			/* CASE 2. Unhandled System Exception */
 			result   = new CommonVO();
@@ -65,7 +104,6 @@ public class CommonAspect {
 			REPL_MSG = BizExceptionCode.search(REPL_CD).getErrMsg();
 			e.printStackTrace();
 			log.e(e.getMessage());
-			
 		} catch (Throwable t) {
 			/* CASE 3. TOP Level 'ERROR' */
 			result   = new CommonVO();
@@ -74,16 +112,23 @@ public class CommonAspect {
 			t.printStackTrace();
 			log.e(t.getMessage());
 		} finally {
-			
 			// [3] 최종 결과값 세팅
 			result.put("REPL_CD", REPL_CD);
 			result.put("REPL_MSG", REPL_MSG);
 			endTime = System.currentTimeMillis();
 		}
-
-		log.i("서비스 메소드 수행 시간    : " + ( endTime - startTime) + "/ms");
-		log.i("서비스 메소드 수행 결과값 : " + result.toJson());
-	    log.i("========================= 서비스 로직 END =============================");
+		
+		if(noLog != null) {
+			if(noLog.inScuuess() == false) {
+				log.i("서비스 메소드 수행 시간    : " + ( endTime - startTime) + "/ms");
+				log.i("서비스 메소드 수행 결과값 : " + result.toJson());
+			    log.i("========================= 서비스 로직 END =============================");
+			}
+		} else {
+			log.i("서비스 메소드 수행 시간    : " + ( endTime - startTime) + "/ms");
+			log.i("서비스 메소드 수행 결과값 : " + result.toJson());
+		    log.i("========================= 서비스 로직 END =============================");
+		}
 	    return result;
 	}
 }

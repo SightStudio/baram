@@ -1,7 +1,7 @@
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack              = require('webpack');
+const CopyWebpackPlugin    = require('copy-webpack-plugin');
+const VueLoaderPlugin      = require('vue-loader/lib/plugin');
+const HtmlWebpackPlugin    = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const path = require('path');
@@ -23,8 +23,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      '@': resolvePath('src'),
+      'vue$'  : 'vue/dist/vue.esm.js',
+      '@'     : resolvePath('src'),
+      '/file' : 'C:/Users/sdm32/Desktop/졸작/baram/FILE'
     }
   },
   devServer: {
@@ -32,8 +33,21 @@ module.exports = {
     open: true,
     compress: true,
     contentBase: '/www/',
-    watchOptions: {
-      poll: true
+    watchOptions: { poll: true },
+    port: 3307,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080/api',
+        changeOrigin: true,
+        pathRewrite: { '^/api': ''}
+      },
+      proxy: {
+        '/file': {
+          target: 'C:/Users/sdm32/Desktop/졸작/baram/FILE',
+          changeOrigin: true,
+          pathRewrite: { '^/file': ''}
+        },
+      }
     }
   },
   module: {

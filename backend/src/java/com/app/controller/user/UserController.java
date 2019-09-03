@@ -2,6 +2,7 @@ package com.app.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,10 +26,12 @@ public class UserController extends BaseController {
 	 * @since  2019. 6. 30.
 	 */
 	@GetMapping("user/login/{id}&{pw}")
-	public ModelAndView userLogin(@ModelAttribute("param") CommonVO param) {
+	public ModelAndView userLogin(@ModelAttribute("request") CommonVO param, ModelMap map) throws Exception{
 		ModelAndView mav = new ModelAndView("jsonView");
-		mav.addObject("request", param);
 		
+		CommonVO result = userService.login(param);
+		map.remove("request");
+		mav.addObject("response", result);
 		return mav;
 	}
 	
@@ -40,12 +43,10 @@ public class UserController extends BaseController {
 	 * @since  2019. 6. 30.
 	 */
 	@PostMapping("user/signin")
-	public ModelAndView userSignin(@ModelAttribute("param") CommonVO param) throws Exception {
-		ModelAndView mav = new ModelAndView("home");
+	public ModelAndView userSignin(@ModelAttribute("request") CommonVO param) throws Exception {
+		ModelAndView mav = new ModelAndView("jsonView");
 		
 		CommonVO result = userService.signup(param);
-		
-		mav.addObject("request" , param);
 		mav.addObject("response", result);
 		
 		return mav;

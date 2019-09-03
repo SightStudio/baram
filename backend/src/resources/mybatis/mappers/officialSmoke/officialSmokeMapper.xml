@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.mapper.officialSmoke">
+	
+	<!-- 금연구역 좌표 선택 -->
+   	<select id="getNonSmokeList" parameterType="commonVO" resultType="commonVO">
+    <![CDATA[
+		SELECT NON_SMOKE_SEQ          as NON_SMOKE_SEQ,
+			   NON_SMOKE_NAME         as AREA_NAME, 
+			   AREA_DETAIL            as AREA_DETAIL,
+			   CITY_NAME              as CITY_NAME,
+			   GU_NAME                as GU_NAME,
+			   AREA_TYPE              as AREA_TYPE,
+			   RESTRICT_BY            as RESTRICT_BY,
+			   IFNULL(AREA_SIZE, 0)   as AREA_SIZE,
+			   PENALTY_PRICE          as PENALTY_PRICE,
+			   IFNULL(REPORT_CALL, 0) as REPORT_CALL,
+			   DORO_ADDRESS			  as DORO_ADDRESS,
+			   ZIBUN_ADDRESS		  as ZIBUN_ADDRESS,
+			   MANAGE_AGENCY		  as MANAGE_AGENCY,
+			   LATITUDE               as LATITUDE,
+			   LONGITUDE              as LONGITUDE,
+			   DATA_REG_DATE 		  as REG_TIME,
+			   AGENCY_CODE            as AGENCY_CODE,
+			   AGENCY_NAME            as AGENCY_NAME
+		FROM   TB_NON_SMOKE
+		WHERE  latitude  between #{sw_lat} and #{ne_lat}
+		   AND longitude between #{sw_lng} and #{ne_lng}
+	]]>
+    </select>
+</mapper>

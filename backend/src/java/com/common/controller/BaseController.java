@@ -18,8 +18,8 @@ public class BaseController {
 	@Autowired
 	public CLog log;
 	
-	@ModelAttribute("param")
+	@ModelAttribute("request")
 	public CommonVO initVO() {
-		return (CommonVO) req.getAttribute("param");
+		return (CommonVO) req.getAttribute("request");
 	}
 }

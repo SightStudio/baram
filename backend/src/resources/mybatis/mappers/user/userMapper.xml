@@ -7,27 +7,28 @@
     <insert id="signup" parameterType="commonVO">
     <![CDATA[
 		INSERT INTO tb_user
-			(id, pw, name, email, phone_num, user_rank_seq)
+			(id, pw, email, name, phone_num, user_rank_seq)
 		VALUES
-			(#{id}, SHA2(#{pw}, 256), #{name}, #{email}, 1)
+			(#{id}, SHA2(#{pw}, 256), #{email}, #{name}, #{phone_num}, 1)
     ]]>
     </insert>
    
 	<!-- 단일 유저 정보 선택 -->
    	<select id="selectUser" parameterType="commonVO" resultType="commonVO">
     <![CDATA[
-		SELECT user_seq, 
-			   id, 
-			   pw, 
-			   name, 
-			   email, 
-			   phone_num,
-			   rank_name,
-			   user_rank_seq
-		FROM  tb_user 
-		    INNER JOIN tb_user_rank
-		USING(user_rank_seq)
-		WHERE id = #{id}
+		SELECT TU.USER_SEQ    as USER_SEQ, 
+			   TU.ID          as ID, 
+			   TU.NAME        as NAME, 
+			   TU.EMAIL       as EMAIL, 
+			   TU.PHONE_NUM   as PHONE_NUM,
+			   TUR.RANK_NAME  as RANK_NAME,
+			   USER_RANK_SEQ  as USER_RANK_SEQ
+		FROM  
+			TB_USER TU 
+			JOIN TB_USER_RANK TUR
+		USING(USER_RANK_SEQ)
+		WHERE ID = #{id} AND
+		      PW = SHA2(#{pw}, 256)
 		LIMIT 1
 	]]>
     </select>

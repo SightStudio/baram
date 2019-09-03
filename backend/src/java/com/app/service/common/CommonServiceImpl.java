@@ -1,37 +1,60 @@
 package com.app.service.common;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.common.collection.CommonVO;
 import com.common.dao.CommonDaoIF;
-import com.common.exception.BizException;
 import com.common.service.BaseService;
+import com.common.util.DateMo;
+import com.common.util.RandomMo;
 
 @Service
 public class CommonServiceImpl extends BaseService 
 							   implements CommonServiceIF {
-	
+
 	@Autowired
 	CommonDaoIF dao;
 	
-	/**
-	 * <pre>
-	 *     Exception Handling 용 테스트 메서드 
-	 * </pre>
-	 * @author Dong-Min-Seol
-	 * @since  2019. 6. 30.
-	 */
+	@Value("#{common['FILE_PATH']}")
+	String filePath;
+	
 	@Override
-	public CommonVO exceptionTest(CommonVO param) throws Exception {
+	public CommonVO OAuthTest(CommonVO param) throws Exception {
+		return null;
+	}
+
+	@Override
+	public CommonVO fileUploadTest(CommonVO param) throws Exception {
 		
-		// [1] 결과 코드 및 container 세팅
 		CommonVO result = new CommonVO();
 		
-		// [2] 강제 Exception 발생 
-		if("error".equals(param.getString("msg")))
-			throw new BizException("900000", "[Test Exception]");
+		MultipartFile fileInput  = (MultipartFile) param.get("uploadFile");
 		
+		String path = filePath + "/temp/" + DateMo.getYYYYMMDD("_") + RandomMo.getRandomString(5)+ "_" + fileInput.getOriginalFilename();;
+		File fileOutput = new File(path);
+
+		FileCopyUtils.copy(fileInput.getBytes(), fileOutput);
 		return result;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
