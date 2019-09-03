@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -18,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class CommonVO extends HashMap<String, Object> {
 	
 	private static final long serialVersionUID = 1L;
+	private static ObjectMapper mapper = new ObjectMapper();
 	
 	/**
 	 * <pre>
@@ -25,6 +28,12 @@ public class CommonVO extends HashMap<String, Object> {
 	 * </pre>
 	 */
 	public CommonVO() {}
+	public CommonVO(String json) {
+		try {
+			this.putAll(mapper.readValue(json, new TypeReference<CommonVO>(){}));
+		} catch (IOException e) {
+			e.printStackTrace();
+	}}
 	
 	/**
 	 * <pre>
@@ -34,9 +43,7 @@ public class CommonVO extends HashMap<String, Object> {
 	 * @author  Dong-Min Seol
 	 * @since   2019.02.03
 	 */
-	public <E> CommonVO (Map<String, Object> map) {
-		map.forEach(this::put);
-	}
+	public <E> CommonVO (Map<String, Object> map) { map.forEach(this::put); }
 	
 	
 	/**
@@ -92,8 +99,13 @@ public class CommonVO extends HashMap<String, Object> {
 	 * @author Dong-Min Seol
 	 * @since  2019.04.01
 	 */
-	public String toJson() throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+	public String toJson() {
+		String result = "";
+		try {
+			result = mapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

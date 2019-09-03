@@ -3,43 +3,50 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.common</groupId>
-	<artifactId>sight</artifactId>
+	<artifactId>baram</artifactId>
 	<name>baram</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	
 	<properties>
-		<!-- java -->
+		<!-- Java -->
 		<java-version>11</java-version>
 		
 		<!-- Encoding -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>    UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
 		<!-- Spring -->
-		<org.springframework-version>5.1.4.RELEASE</org.springframework-version>
+		<spring>5.1.4.RELEASE</spring>
+		<spring.mybatis>2.0.0</spring.mybatis>
 		
-		<!-- HikariCP -->
-		<hikari.version>3.3.0</hikari.version>
+		<!-- App -->
+		<app.junit>4.12</app.junit>
+		<app.aspectj>1.8.13</app.aspectj>
+		<app.mybatis>3.5.0</app.mybatis>		
+		<app.jackson>2.9.9</app.jackson>
+		<app.ehcache>2.10.6</app.ehcache>
+		<app.jwt.jjwt>0.9.1</app.jwt.jjwt>
+		<app.apache.http-client>4.5.2</app.apache.http-client>
+		<app.apache.http-client.core>4.4.6</app.apache.http-client.core>
+		<app.apache.commons-fileupload>1.4</app.apache.commons-fileupload>
+		<app.apache.commons-io>2.6</app.apache.commons-io>
+					
+		<!-- DB -->
+		<db.hikari>3.3.0</db.hikari>
+		<db.mysql-connector>8.0.14</db.mysql-connector>
 		
-		<!-- Logging -->
-		<logback.version>1.0.13</logback.version>
-		<slf4j.version>1.7.5</slf4j.version>
+		<!-- Log -->
+		<log.logback>1.0.13</log.logback>
+		<log.slf4j>1.7.5</log.slf4j>
 		
-		<!-- Aspect J  -->
-		<org.aspectj-version>1.8.13</org.aspectj-version>
+		<!-- ORM -->
+		<orm.jpa.hibernate>4.2.1.Final</orm.jpa.hibernate>
 		
-		<!-- Junit -->
-		<junit.version>4.12</junit.version>
-		
-		<!-- Hibernate / JPA -->
-		<hibernate.version>4.2.1.Final</hibernate.version>
-		
-		<!-- Jackson Object Mapper -->
-		<jackson.version>2.9.9</jackson.version>
-		
-		<!-- Ehcache [Method caching] -->
-		<ehcache.version>2.10.6</ehcache.version>
+		<!-- Servlet -->
+		<servlet.javax>4.0.1</servlet.javax>
+		<servlet.javax.jsp>2.3.3</servlet.javax.jsp>
+		<servlet.javax.jstl>1.2</servlet.javax.jstl>
 	</properties>
 	
 	<dependencies>
@@ -48,20 +55,20 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring}</version>
 		</dependency>
 			
 		<!-- Spring and Transactions -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring}</version>
 			<exclusions>
 				<!-- Exclude Commons Logging in favor of SLF4j -->
 				<exclusion>
@@ -74,44 +81,56 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring}</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-jdbc</artifactId>
-		    <version>${org.springframework-version}</version>
+		    <version>${spring}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring}</version>
 		</dependency>
 		
 		<dependency>
 	      	<groupId>org.springframework</groupId>
 	      	<artifactId>spring-aop</artifactId>
-	      	<version>${org.springframework-version}</version>
+	      	<version>${spring}</version>
 	    </dependency>
 	    
+	    <!-- Spring Security -->
+	    <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring}</version>
+		</dependency>
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
+			<version>${app.junit}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -119,105 +138,166 @@
 	    <dependency>
 	      	<groupId>org.aspectj</groupId>
 	      	<artifactId>aspectjrt</artifactId>
-	      	<version>${org.aspectj-version}</version>
+	      	<version>${app.aspectj}</version>
 	    </dependency>
 	    
 	    <dependency>
 	      	<groupId>org.aspectj</groupId>
 	      	<artifactId>aspectjtools</artifactId>
-	      	<version>${org.aspectj-version}</version>
+	      	<version>${app.aspectj}</version>
 	    </dependency>
 	    
 	    <!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
+			<version>${orm.jpa.hibernate}</version>
 		</dependency>
 		
 		<!-- JDBC [Hikari conf] -->
 	   	<dependency>
 	        <groupId>com.zaxxer</groupId>
 	        <artifactId>HikariCP</artifactId>
-	        <version>3.3.0</version>
+	        <version>${db.hikari}</version>
 	    </dependency>
 	    
 	    <!-- MySQL Connector  -->
 		<dependency>
 		    <groupId>mysql</groupId>
 		    <artifactId>mysql-connector-java</artifactId>
-		    <version>8.0.14</version>
+		    <version>${db.mysql-connector}</version>
 		</dependency>
 		
 		<!-- MyBatis -->
 		<dependency>
 		    <groupId>org.mybatis</groupId>
 		    <artifactId>mybatis</artifactId>
-		    <version>3.5.0</version>
+		    <version>${app.mybatis}</version>
 		</dependency>
 
 		<dependency>
 		    <groupId>org.mybatis</groupId>
 		    <artifactId>mybatis-spring</artifactId>
-		    <version>2.0.0</version>
+		    <version>${spring.mybatis}</version>
 		</dependency>
 		
 		<!-- Logging with SLF4J & LogBack -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
+			<version>${log.slf4j}</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-core</artifactId>
+		    <version>${log.logback}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-			<scope>runtime</scope>
+			<version>${log.logback}</version>
 		</dependency>
 		
 		<!-- Servlet -->
 		<dependency>
 		    <groupId>javax.servlet</groupId>
 		    <artifactId>javax.servlet-api</artifactId>
-		    <version>4.0.1</version>
+		    <version>${servlet.javax}</version>
 		    <scope>provided</scope>
 		</dependency>
 
 		<dependency>
 		    <groupId>javax.servlet.jsp</groupId>
 		    <artifactId>javax.servlet.jsp-api</artifactId>
-		    <version>2.3.3</version>
+		    <version>${servlet.javax.jsp}</version>
 		    <scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<version>${servlet.javax.jstl}</version>
 		</dependency>
 
 		<!-- Jackson -->
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-core</artifactId>
-		    <version>${jackson.version}</version>
+		    <version>${app.jackson}</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
-		    <version>${jackson.version}</version>
+		    <version>${app.jackson}</version>
 		</dependency>
 		
 		<!-- Ehcache -->
 		<dependency>
 		    <groupId>net.sf.ehcache</groupId>
 		    <artifactId>ehcache</artifactId>
-		    <version>${ehcache.version}</version>
+		    <version>${app.ehcache}</version>
 		</dependency>
-				
+		
+		<!-- JWT Tocken Library -->
+		<dependency>
+	    	<groupId>io.jsonwebtoken</groupId>
+	    	<artifactId>jjwt</artifactId>
+	    	<version>${app.jwt.jjwt}</version>
+		</dependency>
+		
+		<!-- HTTP client  -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${app.apache.http-client.core}</version>
+        </dependency>
+ 
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${app.apache.http-client}</version>
+        </dependency>
+        
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${app.apache.commons-fileupload}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${app.apache.commons-io}</version>
+		</dependency>
+		
+		<!-- 
+			java xml bind 
+			[ java EE & Cordova Modules are removed since Java 11 ] 
+		-->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.3.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		
 	</dependencies>
+ 
     <build>
     	<defaultGoal>install</defaultGoal>
     	<directory>${basedir}/target</directory>
@@ -254,7 +334,7 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<url>http://13.124.73.181/manager/text</url>
+					<url>http://www.sight-repository.cf/manager/text</url>
 					<path>/</path>
 					<username>sight</username>
     				<password>bksul40</password>
@@ -276,7 +356,8 @@
 			  <groupId>org.apache.maven.plugins</groupId>
 			  <artifactId>maven-war-plugin</artifactId>
 			  <configuration>
-			    <webXml>${basedir}/webapp/WEB-INF/web.xml</webXml>        
+			    <webXml>${basedir}/webapp/WEB-INF/web.xml</webXml>   
+			    <warSourceDirectory>${basedir}/webapp</warSourceDirectory>     
 			  </configuration>
 			</plugin>
 		</plugins>

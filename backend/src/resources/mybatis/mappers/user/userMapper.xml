@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.mapper.user">
+	
+	<!-- 유저 회원 가입  -->
+    <insert id="signup" parameterType="commonVO">
+    <![CDATA[
+		INSERT INTO tb_user
+			(id, pw, email, name, phone_num, user_rank_seq)
+		VALUES
+			(#{id}, SHA2(#{pw}, 256), #{email}, #{name}, #{phone_num}, 1)
+    ]]>
+    </insert>
+   
+	<!-- 단일 유저 정보 선택 -->
+   	<select id="selectUser" parameterType="commonVO" resultType="commonVO">
+    <![CDATA[
+		SELECT TU.USER_SEQ    as USER_SEQ, 
+			   TU.ID          as ID, 
+			   TU.NAME        as NAME, 
+			   TU.EMAIL       as EMAIL, 
+			   TU.PHONE_NUM   as PHONE_NUM,
+			   TUR.RANK_NAME  as RANK_NAME,
+			   USER_RANK_SEQ  as USER_RANK_SEQ
+		FROM  
+			TB_USER TU 
+			JOIN TB_USER_RANK TUR
+		USING(USER_RANK_SEQ)
+		WHERE ID = #{id} AND
+		      PW = SHA2(#{pw}, 256)
+		LIMIT 1
+	]]>
+    </select>
+   
+    <delete id="dropUserSaveList" parameterType="commonVO">
+    <![CDATA[
+     	DELETE 
+     	FROM  lecture_unique
+		WHERE user_id = #{user_id}
+	]]>
+    </delete>
+</mapper>

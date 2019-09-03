@@ -11,24 +11,26 @@ module.exports = {
     "transform-vue-jsx",
     ["@babel/plugin-transform-runtime",
       {
-        "absoluteRuntime": false,
-        "corejs": false,
-        "helpers": true,
-        "regenerator": true,
-        "useESModules": false
+        "corejs"         : false,
+        "helpers"        : true,
+        "regenerator"    : true,
+        "useESModules"   : false,
+        "absoluteRuntime": false
       }
     ],
     "@babel/plugin-syntax-dynamic-import",  
     [ "module-resolver",
       {
         "alias": {
-          "{COMPONENT}" :  "./src/components",
-          "{PAGE}"      :  "./src/pages",
-          "{ROUTE}"     :  "./src/router",
-          "{UTIL}"      :  "./src/util",
-          "{CSS}"       :  "./src/assets/css",
-          "{IMG}"       :  "./src/assets/image",
-          "{FONT}"      :  "./src/assets/font",
+          "{SERVICE}"   : "./src/services",
+          "{COMPONENT}" : "./src/components",
+          "{STORE}"     : "./src/store",
+          "{PAGE}"      : "./src/pages",
+          "{ROUTE}"     : "./src/router",
+          "{UTIL}"      : "./src/util",
+          "{CSS}"       : "./src/assets/css",
+          "{IMG}"       : "./src/assets/image",
+          "{FONT}"      : "./src/assets/font",
         }
       }
     ]

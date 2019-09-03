@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.mapper.community">
+
+	<!-- 게시글 리스트 조회  -->
+    <select id="getBBSList" parameterType="commonVO" resultType="commonVO">
+    <![CDATA[
+		SELECT
+			TB.BBS_SEQ                        as BBS_SEQ,
+			TU.NAME                           as USER_NAME,
+			TB.USER_SEQ 					  as USER_SEQ,		
+			TB.TITLE   						  as TITLE,
+			TB.CONTENT 						  as CONTENT,
+			IFNULL(TBI.IMG_SRC, 'no-image')   as IMG_SRC,
+			TB.REG_TIME 					  as REG_TIME
+		FROM TB_BBS TB
+			JOIN TB_USER TU
+				USING(USER_SEQ)
+			LEFT JOIN ( SELECT BBS_SEQ, IMG_SRC FROM TB_BBS_IMAGE WHERE SEQ = 1 ) TBI
+				ON TB.BBS_SEQ = TBI.BBS_SEQ
+		LIMIT #{page_start}, #{page_end}
+    ]]>
+    </select>
+	
+	<!-- 게시글 조회  -->
+    <select id="getBBS" parameterType="commonVO" resultType="commonVO">
+    <![CDATA[
+		SELECT
+			TB.BBS_SEQ                                   as BBS_SEQ,
+			TU.ID                                        as USER_ID,
+			TB.USER_SEQ 					             as USER_SEQ,		
+			TB.TITLE   						             as TITLE,
+			TB.CONTENT 						             as CONTENT,
+			DATE_FORMAT(TB.REG_TIME,'%Y-%m-%d %H:%i:%s') as REG_TIME
+		FROM TB_BBS TB
+			JOIN TB_USER TU
+				USING(USER_SEQ)
+		WHERE BBS_SEQ = #{bbs_seq}
+    ]]>
+    </select>
+	
+	<!-- 게시글 이미지 파일 조회  -->
+    <select id="getBBSImageList" parameterType="commonVO" resultType="commonVO">
+    <![CDATA[
+		SELECT
+				TBI.BBS_IMG_SEQ    as BBS_IMG_SEQ,
+				TBI.BBS_SEQ        as BBS_SEQ, 
+				TBI.SEQ            as SEQ,
+				TBI.IMG_NAME       as IMG_NAME,
+				TBI.IMG_SRC        as IMG_SRC,
+				TBI.REG_TIME 	   as REG_TIME
+		FROM TB_BBS_IMAGE TBI
+		WHERE BBS_SEQ = #{bbs_seq}
+		ORDER BY SEQ
+    ]]>
+    </select>
+	
+	<!-- 게시글 등록  -->
+    <insert id="registerBBS" parameterType="commonVO">
+    <![CDATA[
+    	INSERT INTO TB_BBS 
+    		(USER_SEQ, TITLE, CONTENT, REG_TIME)
+		VALUES
+			( #{USER_SEQ}, #{title}, #{content}, now() )
+    ]]>
+    	<selectKey resultType="integer" keyProperty="bbs_seq" order="AFTER">
+		    SELECT LAST_INSERT_ID()
+		</selectKey>
+    </insert>
+    
+    <!-- 게시글 첨부파일 등록  -->
+	<insert id="registerBBSImage" parameterType="commonVO">
+    <![CDATA[
+    	INSERT INTO TB_BBS_IMAGE (BBS_SEQ, SEQ, IMG_NAME, IMG_SRC, REG_TIME)
+			   VALUES
+	]]>
+		<foreach collection="imgList" index="idx" item="imgSrc" separator=",">
+			<foreach collection="imgNameList" index="Nidx" item="imgName">
+				<if test="idx == Nidx">
+	           		( #{bbs_seq}, #{idx}+1 ,#{imgName}, #{imgSrc}, now() )
+	           	</if>
+	        </foreach>
+        </foreach>
+    </insert>
+</mapper>

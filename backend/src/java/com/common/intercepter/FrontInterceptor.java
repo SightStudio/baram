@@ -6,11 +6,17 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.common.collection.CommonVO;
+import com.common.dao.CommonDaoIF;
+import com.common.util.JwtMo;
+
 
 /**
  * Controller 호출 전 Handler를 통해 
@@ -21,7 +27,10 @@ import com.common.collection.CommonVO;
  */
 @Controller
 public class FrontInterceptor extends HandlerInterceptorAdapter {
-
+	
+	@Autowired
+	CommonDaoIF dao;
+	
 	/**
 	 * <pre> 
 	 * 컨트롤러 호출 전 아래 메소드를 실행
@@ -32,16 +41,22 @@ public class FrontInterceptor extends HandlerInterceptorAdapter {
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {
-		CommonVO vo = new CommonVO();
-		Map<String, String[]> requestMap = req.getParameterMap();
+		String body = "";
 		
+		if( ! ServletFileUpload.isMultipartContent(req)) {
+			body= req.getReader().lines()
+					 .reduce("", (accumulator, actual) -> accumulator + actual);
+		}
+		
+		CommonVO vo = body.isEmpty() ? new CommonVO() : new CommonVO(body);
+		Map<String, String[]> requestMap = req.getParameterMap();
+
 		// [1] request param CommonVO에 세팅
 		requestMap.forEach( (k, v) -> {
-			if(v.length == 1) {
+			if(v.length == 1)
 				vo.put(k, v[0]);
-			} else {
+			else 
 				vo.put(k, v);
-			}
 		});
 		
 		// [2] @PathVariables값 CommonVO에 세팅
@@ -50,30 +65,69 @@ public class FrontInterceptor extends HandlerInterceptorAdapter {
 		if (pathVariables != null) 
 			pathVariables.forEach(vo::put);
 		
-		// [3] 필요정보 aBox객체에 저장함
+		// [3] 필요정보 CommonVO 객체에 저장
 		vo.put("requestAddr"  , getIP(req)); 			 // Client의 Host IP
 		vo.put("requestURI"   , req.getRequestURI()); 	 // Client가 요청한 URI
 		vo.put("requestMethod", req.getMethod());     	 // Client가 요청한 Method (GET, POST, PUT, DELETE)
 		
-		// [4] 세팅된 VO request 영역에 저장 후 Controller로 전송
-		req.setAttribute("defaultVO", vo);
+		// [4] 토큰이 있을 경우 CommonVO에 세팅
+		if(! vo.isEmpty("USER_JWT")) {
+			setAuthJWT(vo.getString("USER_JWT"), vo);
+		}
+		
+		// [5] 세팅된 VO request 영역에 저장 후 Controller로 전송
+		req.setAttribute("request", vo);
 		
 		return true;
+	}
+
+	/**
+	 * 인터셉터가 요청을 가로챌 때 파라미터를 설정한 request VO를 제거한다.
+	 * 제거 하지 않을 경우 사용자가 보낸 값도 같이 response 됨 
+	 * 
+	 * @author Dong-Min Seool
+	 * @since  2019-08-26
+	 */
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView mav) throws Exception {
+		mav.getModel().remove("request");
+	}
+
+
+
+
+	/**
+	 * <pre>
+	 *     유저의 토큰을 받아서 해독하고 세팅해주는 함수   
+	 * </pre>
+	 * @author Dong-Min-Seol
+	 * @since  2019. 8. 1.
+	 */
+	private void setAuthJWT(String jwt, CommonVO commonVo) {
+		CommonVO jwtVO = JwtMo.decryptJWT(jwt);
+		if("000000".equals(jwtVO.getString("REPL_CD"))) {
+			commonVo.put("USER_SEQ", jwtVO.getString("USER_SEQ"));
+			commonVo.put("USER_ID" , jwtVO.getString("ID"));
+		}
+		jwtVO = null;
 	}
 	
 	
 	/**
 	 * <pre> 
 	 *  사용자의 IP를 가져오는 메서드
-	 *  리버스 프록시 처리된 IP 가 있을 경우와 아닌 경우로 나눠서 처리
+	 *  현재 운영서버와 같이 웹서버를 경유하여 왔을 경우 eg. [리버스 프록시], 
+	 *  따로 웹서버에서 넘겨준 헤더에서 IP를 가져옴  
 	 * </pre>
 	 * 
 	 * @author  Dong-Min Seol
 	 * @since   2019.05.03  
-	 */
-	public String getIP (HttpServletRequest req) {
+	 */ 
+	private String getIP (HttpServletRequest req) {
 		
-		return Optional.ofNullable(req.getHeader("X-Forwarded-For"))
+		return Optional.ofNullable(req.getHeader("X-Forwarded-For"))	// nginx reverse proxy IP header
 					   .orElse(req.getRemoteAddr());
 	}
+	
+	
 }

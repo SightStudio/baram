@@ -5,16 +5,49 @@
     @since  2019.05.10
 -->
 <template>
-    <f7-page class="intro">
-        <f7-link href="/index" class="start">
-            <p>클릭하여 시작</p>
-        </f7-link>
+    <f7-page class="intro"
+             @page:mounted="onAutoPlay"
+             @page:beforeout="offAutoPlay">
+        
+        <f7-swiper pagination 
+                   :params="swiperConfig"
+                   class="intro-swiper">
+            <f7-swiper-slide>
+                <img src="@/assets/image/intro/slide1.jpg" alt="">
+            </f7-swiper-slide>
+            <f7-swiper-slide>
+                <img src="@/assets/image/intro/slide2.jpg" alt="">
+            </f7-swiper-slide>
+            <f7-swiper-slide>
+                <img src="@/assets/image/intro/slide3.jpg" alt="">
+            </f7-swiper-slide>
+            <f7-swiper-slide>
+                <img src="@/assets/image/intro/slide4.jpg" alt="">
+            </f7-swiper-slide>
+        </f7-swiper>
+
+        <f7-segmented no-gap class="intro-nav">
+            <f7-button href="/gmap" color="green" large fill>시작</f7-button>
+            <f7-button href="/user/login"         large fill>로그인</f7-button>
+        </f7-segmented>
     </f7-page>
 </template>
 <script>
-    export default {}
+    export default {
+        data(){
+            return {
+                swiperConfig : {speed:700, loop: true, slidesPerView: 1, spaceBetween: 0, autoplay: {delay: 4000}}
+            }
+        },
+        methods : {
+            onAutoPlay()  { this.swiperConfig.autoplay = {delay: 4000}; },
+            offAutoPlay() { this.swiperConfig.autoplay = false; }
+        },
+    }
 </script>
 <style scoped>
-    .intro { width  :100%; height : 100%; background: center / contain no-repeat url('~@/assets/image/common/intro.png'); }
-    .start{ display: block; text-align: center; font-size : 2em; margin-top: 100%; }
+    .intro-swiper{width: 100%; height: 94%; }
+    .intro-swiper img {width: 100%; height: 100%}
+
+    .intro-nav {height: 6%;}
 </style>

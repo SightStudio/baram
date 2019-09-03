@@ -3,8 +3,7 @@
 
 	<diskStore path="java.io.tmpdir" />
 
-	<!-- 캐시 정의 -->
-
+	<!-- 메서드 레벨 단위의 cache -->
 	<!-- 
 		name : 캐시의 이름이다. @Cacheable("캐시의 이름") 와 일치시켜줘야한다.
 		eternal             : 한번 캐시하면 영원히 유지할 것인지의 여부 
@@ -14,13 +13,14 @@
 		overflowToDisk      : 메모리저장공간이 부족할때 Disk 사용여부 [ 가상 메모리를 쓸 것인지 ] 
 	-->
 
-	<cache name="uniqueTimetable" 
+	<!-- 
+	<cache name="example_Cache_Config" 
 		   maxElementsInMemory="300" 
 		   eternal="true"
 	       timeToIdleSeconds="500" 
 	       timeToLiveSeconds="500"
 	       overflowToDisk="true" />
-	       
+	-->  
 </ehcache>
 
 
