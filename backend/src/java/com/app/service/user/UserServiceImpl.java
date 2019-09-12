@@ -52,7 +52,7 @@ public class UserServiceImpl extends BaseService
 		CommonVO userInfo = dao.select("com.app.mapper.user.selectUser", param);
 		
 		// [3] 아이디 검증
-		if( userInfo.getString("id") == null )
+		if( userInfo == null )
 			throw new BizException("000002", "[로그인 오류] 아이디와 비밀번호를 다시확인해주세요");
 		
 		result.put("USER_JWT" , JwtMo.encryptJWT(userInfo));

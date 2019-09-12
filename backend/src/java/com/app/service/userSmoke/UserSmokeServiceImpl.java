@@ -19,6 +19,7 @@ import com.common.dao.CommonDaoIF;
 import com.common.service.BaseService;
 import com.common.util.DateMo;
 import com.common.util.RandomMo;
+import com.common.util.aws.AwsS3Mo;
 
 @Service
 public class UserSmokeServiceImpl extends    BaseService 
@@ -29,7 +30,9 @@ public class UserSmokeServiceImpl extends    BaseService
 
 	@Value("#{common['FILE_PATH']}")
 	String filePath;
-
+	
+	@Autowired
+	AwsS3Mo awsS3;
 	/**
 	 * <pre>
 	 *   사용자 지정 구역 정보를 가져오는 함수 
@@ -77,6 +80,7 @@ public class UserSmokeServiceImpl extends    BaseService
 	 */
 	@Override
 	public CommonVO getRecentUserSmokeCNT(CommonVO param) throws Exception {
+		
 		// [1] 결과 container 세팅
 		CommonVO result = new CommonVO();
 		
@@ -151,10 +155,13 @@ public class UserSmokeServiceImpl extends    BaseService
 		// [4] 임시 저장했던 파일 해당 폴더로 저장
 		File folder = new File(String.format("%s/userSmoke/%s", filePath, param.getString("SMOKE_SEQ")));
 		folder.mkdirs();
+		
 		for(int i = 0 ; i < imgNameArr.length; i++) {
 			File tempFile = new File(imgTempArr[i]);
 			File output   = new File(filePath+imgOutputArr[i]);
-			FileCopyUtils.copy(tempFile , output);
+			awsS3.copy(imgTempArr[i],imgOutputArr[i]);
+//			FileCopyUtils.copy(tempFile , output);
+			
 		}
 		param.put("imgList", Arrays.asList(imgOutputArr));
 		
@@ -180,18 +187,15 @@ public class UserSmokeServiceImpl extends    BaseService
 		// [2] 파일 가져오기
 		MultipartFile fileInput  = (MultipartFile) param.get("uploadFile");
 		String fileName = DateMo.getYYYYMMDD("_") + RandomMo.getRandomString(20)+ "_" + fileInput.getOriginalFilename();
-		
 		String folder   = filePath + "/temp/gmap/";
-		String path     = folder   + fileName;
 		
 		File folderObj  = new File(folder);
-		File fileOutput = new File(path);
 
 		// [3] 폴더 미존재시 폴더 생성
 		if( !folderObj.exists() ) folderObj.mkdirs();
 		
-		FileCopyUtils.copy(fileInput.getBytes(), fileOutput);
-		result.put("fileName", fileName);
+		String s3UploadedURL = awsS3.upload(fileInput, "static/temp/gmap", fileName);
+		result.put("fileName", s3UploadedURL);
 		return result;
 	}
 }
