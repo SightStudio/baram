@@ -71,7 +71,7 @@ public class CommonVO extends HashMap<String, Object> {
 	 *
 	 */
 	public String getString(String key) {
-		return Optional.of(String.valueOf(this.get(key)))
+		return Optional.ofNullable(String.valueOf(this.get(key)))
 					   .filter(i -> ! "null".equals(i))
 					   .filter(i -> ! i.isEmpty())
 					   .orElse("");
@@ -86,7 +86,7 @@ public class CommonVO extends HashMap<String, Object> {
 	 *
 	 */
 	public int getInt(String key) {
-		return Optional.of(String.valueOf(this.get(key)))
+		return Optional.ofNullable(String.valueOf(this.get(key)))
 					   .filter(i -> ! "null".equals(i))
 					   .filter(i -> ! i.isEmpty())
 					   .map(Integer::parseInt)
