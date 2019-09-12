@@ -13,7 +13,7 @@
 		<java-version>11</java-version>
 		
 		<!-- Encoding -->
-		<project.build.sourceEncoding>    UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
 		<!-- Spring -->
@@ -27,11 +27,13 @@
 		<app.jackson>2.9.9</app.jackson>
 		<app.ehcache>2.10.6</app.ehcache>
 		<app.jwt.jjwt>0.9.1</app.jwt.jjwt>
-		<app.apache.http-client>4.5.2</app.apache.http-client>
-		<app.apache.http-client.core>4.4.6</app.apache.http-client.core>
-		<app.apache.commons-fileupload>1.4</app.apache.commons-fileupload>
 		<app.apache.commons-io>2.6</app.apache.commons-io>
-					
+		<app.apache.http-client>4.5.10</app.apache.http-client>
+		<app.apache.http-client.core>4.4.12</app.apache.http-client.core>
+		<app.apache.commons-fileupload>1.4</app.apache.commons-fileupload>
+		<app.apache.commons-beanutils>1.9.4</app.apache.commons-beanutils>
+		<app.apache.commons-configuration2>2.5</app.apache.commons-configuration2>
+		 
 		<!-- DB -->
 		<db.hikari>3.3.0</db.hikari>
 		<db.mysql-connector>8.0.14</db.mysql-connector>
@@ -47,6 +49,9 @@
 		<servlet.javax>4.0.1</servlet.javax>
 		<servlet.javax.jsp>2.3.3</servlet.javax.jsp>
 		<servlet.javax.jstl>1.2</servlet.javax.jstl>
+		
+		<!-- AWS -->
+		<aws.java.sdk>1.11.628</aws.java.sdk>
 	</properties>
 	
 	<dependencies>
@@ -273,6 +278,35 @@
 			<artifactId>commons-io</artifactId>
 			<version>${app.apache.commons-io}</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-configuration2</artifactId>
+		    <version>${app.apache.commons-configuration2}</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>commons-beanutils</groupId>
+		    <artifactId>commons-beanutils</artifactId>
+		    <version>${app.apache.commons-beanutils}</version>
+		</dependency>
+		
+		<!-- AWS -->
+		<!-- 
+		<dependency>
+		    <groupId>com.amazonaws</groupId>
+		    <artifactId>aws-java-sdk</artifactId>
+		    <version>${aws.java.sdk}</version>
+		</dependency> 
+		-->
+		
+		<!-- only Use S3  -->
+		<dependency>
+		    <groupId>com.amazonaws</groupId>
+		    <artifactId>aws-java-sdk-s3</artifactId>
+		    <version>${aws.java.sdk}</version>
+		</dependency>
+		
 		
 		<!-- 
 			java xml bind 
