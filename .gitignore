@@ -58,7 +58,8 @@ backend/.settings
 # exclude maven target output
 backend/target/
 backend/webapp/WEB-INF/classes/*
-
+backend/src/resources/properties/aws.properties
+backend/src/resources/properties/db.properties
 
 ######################################
 #		3. Static files
