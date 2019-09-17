@@ -24,34 +24,33 @@
 		</f7-appbar> <!-- navbar END -->
 
 		<logo></logo>
-		
-		<f7-list no-hairlines>
-			<f7-list-input
-				label="아이디"
-				type="text"
-				placeholder="ID"
-				required
-				validate
-				clear-button
-				:value="id"
-    			@input="id = $event.target.value"
-			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-			</f7-list-input>
-
-			<f7-list-input
-				label="비밀번호"
-				type="password"
-				placeholder="비밀번호를 입력해주세요"
-				required
-				validate
-				clear-button
-				:value="pw"
-    			@input="pw = $event.target.value"
-			> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-			</f7-list-input>
+		<br>
+		<f7-list>
+			<f7-list-item>
+				<f7-list-input
+					type="text"
+					placeholder="가입한 이메일 주소 입력"
+					required
+					validate
+					clear-button
+					:value="id"
+					@input="id = $event.target.value">
+				</f7-list-input>
+			</f7-list-item>
+			<f7-list-item>
+				<f7-list-input
+					type="password"
+					placeholder="비밀번호를 입력해주세요"
+					required
+					validate
+					clear-button
+					:value="pw"
+					@input="pw = $event.target.value">
+				</f7-list-input>
+			</f7-list-item>
 		</f7-list>
 
-		<f7-block strong no-hairlines-ios>
+		<f7-block class="ctrl-btn" strong no-hairlines-ios>
 			<f7-button fill raised @click="submit">로그인</f7-button>
 			<br>
 			<f7-button fill raised @click="submitKakao">카카오 로그인하기</f7-button>
@@ -118,5 +117,9 @@ export default {
 }
 </script>
 <style scoped>
-
+.ctrl-btn > .button {
+	--f7-button-height  : 2rem;
+	--f7-button-bg-color: #2ac5f5;
+	font-size: 1.2rem;
+}
 </style>
