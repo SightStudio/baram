@@ -81,7 +81,7 @@
                             LONGITUDE : el.LONGITUDE,
                             TITLE     : el.TITLE,
                             TYPE      : el.TYPE,
-                            IMG_SRC   : el.IMG_SRC != 'no-image' ? `file/${el.IMG_SRC}` : require('@/assets/image/common/no_image.png'),
+                            IMG_SRC   : el.IMG_SRC != 'no-image' ? `${el.IMG_SRC}` : require('@/assets/image/common/no_image.png'),
                             REG_TIME  : el.REG_TIME
                           }
                         )

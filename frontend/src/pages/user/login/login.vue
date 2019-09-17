@@ -17,7 +17,7 @@
 			</div>
 
 			<div class="right">
-				<f7-button color="black">
+				<f7-button href="/" color="black back">
 					<f7-icon f7="home"></f7-icon>
 				</f7-button>
 			</div>

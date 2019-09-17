@@ -6,7 +6,7 @@
     @since  2019.05.10
 -->
 <template>
-    <f7-panel id="user-pannel" left resizable theme-dark
+    <f7-panel id="user-pannel" left resizable
               @panel:open="getUser">
         <f7-page>
             <!-- case [1] 로그인한 경우 -->
@@ -34,13 +34,11 @@
                 </f7-block><!-- .profile-info end -->
                 
                 <f7-block class='profile-content'>
-                    <f7-list class="profile-menu">
+                    <f7-list class="profile-menu" no-hairlines no-hairlines-between>
                         <f7-list-item panel-close title="구역찾기"    link="/gmap"></f7-list-item>
                         <f7-list-item panel-close title="장소등록"    link="/gmap/register"></f7-list-item>
                         <f7-list-item panel-close title="즐겨찾기"    link="/user/favor"></f7-list-item>
                         <f7-list-item panel-close title="커뮤니티"    link="/community/list"></f7-list-item>
-                        <f7-list-item panel-close title="포인트 상점" link="#"></f7-list-item>
-                        <f7-list-item panel-close title="고객센터"    link="#"></f7-list-item>
                         <f7-list-item panel-close title="로그아웃"    link="#" @click="logout"></f7-list-item>
                     </f7-list> <!-- .profile-menu END -->
                 </f7-block> <!-- .profile-content END -->
@@ -56,12 +54,10 @@
                     <p> 로그인이 되어있지 않습니다. </p>
                     <p> 로그인을 해주세요.         </p>
                     
-                    <f7-list class="profile-menu">
+                    <f7-list class="profile-menu" no-hairlines no-hairlines-between>
                         <f7-list-item panel-close title="구역찾기"    link="/gmap"></f7-list-item>
                         <f7-list-item panel-close title="장소등록"    link="/gmap/register"></f7-list-item>
                         <f7-list-item panel-close title="커뮤니티"    link="/community/list"></f7-list-item>
-                        <f7-list-item panel-close title="포인트 상점" link="#"></f7-list-item>
-                        <f7-list-item panel-close title="고객센터"    link="#"></f7-list-item>
                         <f7-list-item panel-close title="로그인"      link="/user/login"></f7-list-item>
                     </f7-list> <!-- .profile-menu END -->
                 </f7-block>
@@ -106,7 +102,6 @@ export default {
                                 this.$f7.views.main.router.navigate('/', { clearPreviousHistory : true });
                             })
                        });
-            
         }
     }
 }

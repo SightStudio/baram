@@ -27,8 +27,8 @@
         </f7-swiper>
 
         <f7-segmented no-gap class="intro-nav">
-            <f7-button href="/gmap" color="green" large fill>시작</f7-button>
-            <f7-button href="/user/login"         large fill>로그인</f7-button>
+            <f7-button href="/gmap"       color="blue" large fill>시작</f7-button>
+            <f7-button href="/user/login" color="gray" large fill>로그인</f7-button>
         </f7-segmented>
     </f7-page>
 </template>
@@ -46,8 +46,13 @@
     }
 </script>
 <style scoped>
-    .intro-swiper{width: 100%; height: 94%; }
+    .button{
+        height: 100%;
+        --f7-button-border-radius: 0;
+        --f7-button-large-height : 70px;
+        --f7-button-large-font-size : 1.3rem;
+    }
+    .intro-swiper{width: 100%; height: 90%;}
     .intro-swiper img {width: 100%; height: 100%}
-
-    .intro-nav {height: 6%;}
+    .intro-nav {height: 10%;}
 </style>

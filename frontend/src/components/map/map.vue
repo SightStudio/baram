@@ -41,7 +41,7 @@ export default {
       // [a] 맵이 없을 경우 지도 인스턴스 새로 생성 
       if (!this.map) {
         let event = {
-          click       : () => this.$emit('click-map'  ), 
+          click       : () => this.$emit('click-map'), 
           dragend     : () => this.$emit('dragend'),
           zoomChanged : () => this.$emit('zoom-changed')
         }

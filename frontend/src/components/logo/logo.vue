@@ -9,6 +9,6 @@ export default {}
 </script>
 
 <style scoped>
-    .logo { width: 100%; height: 200px; text-align: center; font-size: 0; margin-top: 30px; }
-    .logo img{ width: 100%; height:200px; display: inline-block; }
+    .logo    { text-align: center; font-size: 0; margin-top: 30px; }
+    .logo img{ display: inline-block; }
 </style>

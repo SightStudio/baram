@@ -12,7 +12,7 @@
         <p> 위치 등록 </p>
 
         <div class="right">
-          <f7-button color="black" href="/">
+          <f7-button href="/" color="black back">
             <f7-icon f7="home"></f7-icon>
           </f7-button>
         </div>
@@ -148,7 +148,8 @@ export default {
      * @author Dong-Min Seol
      * @since  2019.08.16
      */
-    mapClick(map) {
+    mapClick() {
+      let map = this.$refs.dmap.map;
       let formData = this.form;
       map.clearMarkers();
       this.markers.splice(0, this.markers.length);
@@ -171,7 +172,7 @@ export default {
       data.append('latitude'   , this.form.geo_latitude);
       data.append('longitude'  , this.form.geo_longitude);
       data.append('content'    , this.form.content);
-      data.append('imgListStr' , this.form.registerImg);
+      data.append('imgListStr' , this.form.imgList);
       data.append('USER_JWT'   , this.$store.state.userJwt);
 
       this.$http.post('api/user-smoke/register', data)
@@ -187,7 +188,6 @@ export default {
                     })
                 })
     }, // registerLocation() END
-
     setRegisterType() {
       console.log(this.$refs.regiserType.value)
     },
@@ -206,7 +206,8 @@ export default {
           if( request.status >= 200 && request.status < 300) {
               load(request.responseText)
               const data = JSON.parse(request.responseText);
-              imgList.push(data.response.fileName);
+              this.form.imgList.push(data.response.fileName);
+              console.log(this.form.imgList)
           } else {
               error('oh no');
           }
@@ -219,10 +220,10 @@ export default {
         const data    = JSON.parse(uniqueFileId);
         const imgName = data.response.fileName;
 
-        let index = imgList.indexOf(imgName);
+        let index = this.form.imgList.indexOf(imgName);
 
         if (index !== -1) 
-          imgList.splice(index, 1);
+          this.form.imgList.splice(index, 1);
 
         load();
       }
