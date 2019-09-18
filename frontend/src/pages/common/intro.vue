@@ -21,9 +21,6 @@
             <f7-swiper-slide>
                 <img src="@/assets/image/intro/slide3.jpg" alt="">
             </f7-swiper-slide>
-            <f7-swiper-slide>
-                <img src="@/assets/image/intro/slide4.jpg" alt="">
-            </f7-swiper-slide>
         </f7-swiper>
 
         <f7-segmented no-gap class="intro-nav">
