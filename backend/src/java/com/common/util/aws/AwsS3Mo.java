@@ -45,7 +45,7 @@ public class AwsS3Mo {
 	public AwsS3Mo(AwsConfig awsConfig) {
 		this.awsConfig = awsConfig;
 		s3Client = AmazonS3ClientBuilder.standard()
-					 .withCredentials(awsConfig.getCredsProvider())
+					 .withCredentials(this.awsConfig.getCredsProvider())
 					 .withRegion(Regions.AP_NORTHEAST_2)
 					 .build();
 		this.defaultBucketName = awsConfig.getAwsProperty("S3_BUCKET_NAME");
@@ -73,9 +73,10 @@ public class AwsS3Mo {
 	 * @since  2019-09-12
 	 */
     public String copy(String s3PathFrom, String s3PathTo) {
-    	CopyObjectRequest copyObjRequest = new CopyObjectRequest(defaultBucketName, s3PathFrom, defaultBucketName, s3PathTo);
+    	CopyObjectRequest copyObjRequest = new CopyObjectRequest(defaultBucketName, s3PathFrom, defaultBucketName, s3PathTo)
+    											.withCannedAccessControlList(CannedAccessControlList.PublicRead);
 		s3Client.copyObject(copyObjRequest);
-    	return s3Client.getUrl(defaultBucketName, s3PathTo).toString();
+    	return s3Client.getUrl(defaultBucketName, s3PathTo).getPath().substring(1);
     }
     
     /**
@@ -102,7 +103,7 @@ public class AwsS3Mo {
     	PutObjectRequest putReq = new PutObjectRequest(defaultBucketName, fileName, uploadFile)
     									.withCannedAcl(CannedAccessControlList.PublicRead);
     	s3Client.putObject(putReq);
-        return s3Client.getUrl(defaultBucketName, fileName).toString();
+        return s3Client.getUrl(defaultBucketName, fileName).getPath().substring(1);
     }
     
     private void removeNewFile(File targetFile) {

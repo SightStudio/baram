@@ -2,9 +2,6 @@
   <f7-page ptr :ptr-mousewheel="true" 
                @page:beforein="loadList" 
                @ptr:refresh="loadList">
-
-               <!-- :infinite-distance="50"
-               :infinite-preloader="false" -->
     <f7-appbar>
       <f7-navbar
           title="자유 게시판" 
@@ -71,7 +68,7 @@
                             BBS_SEQ  : el.BBS_SEQ,
                             TITLE    : el.TITLE,
                             AUTHOR   : el.USER_NAME,
-                            IMG_SRC  : el.IMG_SRC != 'no-image' ? `file/${el.IMG_SRC}` : require('@/assets/image/common/no_image.png'),
+                            IMG_SRC  : el.IMG_SRC != 'no-image' ? `${el.IMG_SRC}` : require('@/assets/image/common/no_image.png'),
                             REG_TIME : el.REG_TIME
                           }
                         )
@@ -94,21 +91,6 @@
       moveToPage(){
 
       },
-      loadMore(event, done) {
-        // const self = this;
-        // setTimeout(() => {
-        //   const picURL = `https://cdn.framework7.io/placeholder/abstract-88x88-${(Math.floor(Math.random() * 10) + 1)}.jpg`;
-        //   const song   = self.songs[Math.floor(Math.random() * self.songs.length)];
-        //   const author = self.authors[Math.floor(Math.random() * self.authors.length)];
-
-        //   self.items.push({
-        //     title: song,
-        //     author,
-        //     cover: picURL,
-        //   });
-        //   done();
-        // }, 1000);
-      }, // LoadMore() end 
     },
   };
 </script>

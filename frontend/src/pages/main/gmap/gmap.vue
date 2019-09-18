@@ -23,7 +23,7 @@
       ></f7-searchbar>
       
       <div class="right">
-        <f7-button color="black" href="/">
+        <f7-button href="/" color="black back">
           <f7-icon f7="home"></f7-icon>
         </f7-button>
       </div>
@@ -82,15 +82,14 @@
           link='#'>
         </f7-list-item>
 
-        <f7-list-item  v-else-if="areaData.officialType == 'non-official'"
+        <f7-list-item v-else-if="areaData.officialType == 'non-official'"
           :title="areaData.AREA_NAME"
           sheet-open=".location-sheet"
           @click="getRegisterImages"
           link='#'>
 
-          <img slot="media" :src="`/file/${areaData.IMG_SRC}`" width="80" />
+          <img slot="media" :src="`${areaData.IMG_SRC}`" width="80" />
         </f7-list-item>
-
       </f7-list>
     </f7-block> <!-- .location-info-wrapper END -->
 

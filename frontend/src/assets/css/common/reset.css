@@ -1,13 +1,21 @@
-p{margin: 0;}
-.list {margin: 0;}
-.block{margin: 0;}
+p{ margin: 0; }
+.list { margin: 0; }
+.block{ margin: 0; }
 
 .tab-bottom{position: absolute; bottom: 0; width: 100%;}
 
 /* 모든 list item background 제거*/
 .ios .list ul { background: none !important; }
-.block-strong{ background: none !important; }
+.block-strong{  background: none !important; }
 .page .page-content { padding: 0; }
 
 .popover-angle{ display: none; }
 .popover-inner{ width: 100%; height: 100%;}
+
+:root {
+    --f7-bars-bg-color: #fff;
+}
+
+.ios {
+    --f7-page-bg-color: #fff;
+}

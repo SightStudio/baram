@@ -62,7 +62,13 @@ backend/src/resources/properties/aws.properties
 backend/src/resources/properties/db.properties
 
 ######################################
-#		3. Static files
+#		4. App-migration Exclution
+######################################
+
+app-migration
+
+######################################
+#		4. Static files
 ######################################
 FILE/
 LOG/

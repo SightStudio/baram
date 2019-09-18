@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.common.collection.CommonVO;
@@ -24,7 +23,6 @@ import com.common.util.aws.AwsS3Mo;
 @Service
 public class UserSmokeServiceImpl extends    BaseService 
 							      implements UserSmokeIF {
-	
 	@Autowired
 	CommonDaoIF dao;
 
@@ -33,6 +31,7 @@ public class UserSmokeServiceImpl extends    BaseService
 	
 	@Autowired
 	AwsS3Mo awsS3;
+	
 	/**
 	 * <pre>
 	 *   사용자 지정 구역 정보를 가져오는 함수 
@@ -123,14 +122,13 @@ public class UserSmokeServiceImpl extends    BaseService
 	@Override
 	@Transactional(rollbackFor={Exception.class})
 	public CommonVO registerArea(CommonVO param) throws Exception {
-		
+
+		// [rollback] 롤백시 업로드한 이미지 제거
 		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
 			@Override
 			public void afterCompletion(int status) {
 				if (status == STATUS_ROLLED_BACK) {
-					log.e("롤백 처리");
-	            }else {
-	            	log.e("롤백 처리 안됨");
+					log.e("비정상 적인 입력입니다. 롤백 처리되었습니다.");
 	            }
 			};
 		});
@@ -142,32 +140,24 @@ public class UserSmokeServiceImpl extends    BaseService
 		dao.insert("com.app.mapper.userSmoke.registerArea", param);
 		
 		// [3] 등록할 이미지 가져오기
-		String[] imgNameArr = param.getString("imgListStr").split(",");
-		
-		String[] imgTempArr = Stream.of(imgNameArr)
-								     .map(imgName -> String.format("%s/temp/%s", filePath, imgName))
-								     .toArray(String[]::new);
-		
-		String[] imgOutputArr = Stream.of(imgNameArr)
-				 				       .map(imgName -> String.format("/userSmoke/%s/%s", param.getString("SMOKE_SEQ"), imgName))
-				 				       .toArray(String[]::new);
-		
+		String[] imgTempURLArr = param.getString("imgListStr").split(",");
+
 		// [4] 임시 저장했던 파일 해당 폴더로 저장
-		File folder = new File(String.format("%s/userSmoke/%s", filePath, param.getString("SMOKE_SEQ")));
-		folder.mkdirs();
-		
-		for(int i = 0 ; i < imgNameArr.length; i++) {
-			File tempFile = new File(imgTempArr[i]);
-			File output   = new File(filePath+imgOutputArr[i]);
-			awsS3.copy(imgTempArr[i],imgOutputArr[i]);
-//			FileCopyUtils.copy(tempFile , output);
-			
-		}
+		String[] imgOutputArr = 
+				Stream.of(imgTempURLArr)
+				      .map(imgTempPath -> {
+				    	 String [] temp = imgTempPath.split("/");
+			    	     String imgTempFileName = temp[temp.length-1];
+			    	     String destinationPath = String.format("static/userSmoke/%s/%s", param.getString("SMOKE_SEQ"), imgTempFileName);
+				    	 return awsS3.moveTo(imgTempPath, destinationPath);  
+				      })
+				      .toArray(String[]::new);
+
 		param.put("imgList", Arrays.asList(imgOutputArr));
 		
 		// [5] 사용자 입력 이미지 등록
 		dao.insert("com.app.mapper.userSmoke.registerAreaImage", param);
-		
+
 		return result;
 	}
 	

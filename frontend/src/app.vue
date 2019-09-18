@@ -28,8 +28,9 @@ export default {
 
       f7params: {
         id   : 'sight.spa.baram', // App bundle ID
-        name : 'Framework7',            // App name
-        theme: 'ios',                   // Automatic theme detection
+        name : 'Framework7',      // App name
+        //theme: 'auto',            // Automatic theme detection
+        theme: 'ios',
         
         // App routes
         routes: routes,
