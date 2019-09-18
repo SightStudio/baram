@@ -13,7 +13,7 @@
             <f7-block class="profile-wrapper" v-if="userToken != null">
                 <f7-block class="profile-info">
                     <f7-button class="notify-wrapper" href="/user/recent" panel-close>
-                        <f7-icon f7="bell" color="white">
+                        <f7-icon f7="bell" color="black">
                             <f7-badge color="red">{{ recentSmokeCnt }}</f7-badge>
                         </f7-icon>
                     </f7-button>

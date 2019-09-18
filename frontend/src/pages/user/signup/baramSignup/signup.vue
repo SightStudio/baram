@@ -37,8 +37,7 @@
 			clear-button
 			:value="id"
     		@input="id = $event.target.value"
-		> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-		</f7-list-input>
+		></f7-list-input>
 
 		<f7-list-input
 			name="pw"
@@ -51,8 +50,7 @@
 			clear-button
 			:value="pw"
     		@input="pw = $event.target.value"
-		> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-		</f7-list-input>
+		></f7-list-input>
 
 		<f7-list-input
 			name="email"
@@ -65,38 +63,20 @@
 			clear-button
 			:value="email"
     		@input="email = $event.target.value"
-		> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-		</f7-list-input>
-
-		<f7-list-input
-			name="phone_num"
-			label="핸드폰 번호"
-			type="text"
-			placeholder="핸드폰 번호____"
-			info="- 없이 숫자만 적어주세요"
-			pattern="[0-9]*"
-			error-message="숫자만 적어주세요"
-			required
-			validate
-			clear-button
-			:value="phone_num"
-    		@input="phone_num = $event.target.value"
-		> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-		</f7-list-input>
+		></f7-list-input>
 
 		<f7-list-input
 			name="name"
 			label="이름"
 			type="text"
-			placeholder="이름......"
+			placeholder="이름"
 			info="With custom error message"
 			required
 			validate
 			clear-button
 			:value="name"
     		@input="name = $event.target.value"
-		> <f7-icon icon="demo-list-icon" slot="media"></f7-icon>
-		</f7-list-input>
+		></f7-list-input>
     </f7-list>
 
     <f7-block strong no-hairlines-ios>

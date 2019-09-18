@@ -29,4 +29,17 @@
 		   AND longitude between #{sw_lng} and #{ne_lng}
 	]]>
     </select>
+    
+    <!-- 흡연구역 좌표 선택 -->
+   	<select id="getSmokeList" parameterType="commonVO" resultType="commonVO">
+    <![CDATA[
+		SELECT SMOKE_SEQ    as NON_SMOKE_SEQ,
+			   NAME         as AREA_NAME, 
+			   LAT          as LATITUDE,
+			   LNG          as LONGITUDE
+		FROM   TB_SMOKE
+		WHERE  LAT  between #{sw_lat} and #{ne_lat}
+		   AND LNG  between #{sw_lng} and #{ne_lng}
+	]]>
+    </select>
 </mapper>

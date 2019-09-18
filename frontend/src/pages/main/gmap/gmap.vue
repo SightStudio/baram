@@ -58,8 +58,8 @@
       <f7-toolbar class="location-info-header">
 
         <!-- [라디오 버튼] 흡연 / 금연 구억 & 공식 비공식 -->
-        <radioSwitch :radioList="radioList.isSmoke"    ref="smokeType"    @radio:change="loadSmokeMarker" ></radioSwitch>
-        <radioSwitch :radioList="radioList.isOfficial" ref="officialType" @radio:change="loadSmokeMarker" ></radioSwitch>
+        <radioSwitch :radioList="radioList.isSmoke"    ref="smokeType"    @radio:change="loadSmokeMarker"></radioSwitch>
+        <radioSwitch :radioList="radioList.isOfficial" ref="officialType" @radio:change="loadSmokeMarker"></radioSwitch>
 
         <!-- [버튼 1] 로드뷰 표시 -->
         <f7-button @click="toggleRoadview" :color="roadViewVisibleColor">
@@ -88,7 +88,7 @@
           @click="getRegisterImages"
           link='#'>
 
-          <img slot="media" :src="`${areaData.IMG_SRC}`" width="80" />
+          <img slot="media" :src="`${areaData.IMG_SRC}`" width="80"/>
         </f7-list-item>
       </f7-list>
     </f7-block> <!-- .location-info-wrapper END -->
@@ -261,14 +261,13 @@ export default {
           NON_SMOKE_NAME: '',
           PENALTY_PRICE : 0,
           NON_SMOKE_SEQ : 0,
+          SMOKE_SEQ     : 0,
           REG_TIME      : '',
           REPORT_CALL   : '',
           RESTRICT_BY   : '',
       },
-      customData : {
-
-      },
-      infoContainer  : [],
+      customData    : { },
+      infoContainer : [],
     }
   },
   methods : {
@@ -348,7 +347,7 @@ export default {
       this.searchList  = [];
       let map = this.$refs.dmap.map
       map.searchArea(this.searchWord, (result) => {
-          result.DATA.forEach( el => { this.searchList.push(el)} )
+          result.DATA.forEach( el => { this.searchList.push(el) } )
       });
     }, // searchArea() end
 
@@ -378,7 +377,7 @@ export default {
 
       if(this.isWatching) {
       // [1] 위치 추적 허용
-        let wp = watchPosition( gps =>  {
+        this.watchPointObj = watchPosition( gps =>  {
           let map = this.$refs.dmap.map
           let lat = gps.coords.latitude;
           let lng = gps.coords.longitude;
@@ -387,8 +386,6 @@ export default {
           map.setCenter( {lat : lat, lng: lng });
           pList.push({ name: 'sight', type: 'myPosition', location: {lat : lat, lng: lng } } );
         })
-
-        this.watchPointObj = wp;
         this.watchBtnColor = 'blue'
         this.$f7.dialog.alert('위치추적이 설정되었습니다.', '위치추적');
       } else {
@@ -416,6 +413,7 @@ export default {
         pList.push({ name: 'sight', type: 'myPosition', location: {lat : lat, lng: lng } } );
       })
     }, // setGPSvalue() end
+    
     /**
      * 지도에 로드뷰를 표시해주는 함수
      * @author Dong-Min Seol
@@ -428,6 +426,7 @@ export default {
       this.isRoadViewVisible    ? map.attachRoadview() : map.detachRoadview()
       this.roadViewVisibleColor = this.isRoadViewVisible? 'blue' : 'black'
     },
+
     /**
      * 로드 뷰 실행시 위치를 알려주는 함수
      */
@@ -435,6 +434,7 @@ export default {
       const roadViewObj = this.$refs.rv.rv;
       roadViewObj.setPanoramaID(this.areaData.LATITUDE, this.areaData.LONGITUDE);
     },
+
     /**
      * 마커의 상세 정보를 Sheet를 통해 보여주는 함수
      * @author Dong-Min Seol
@@ -444,12 +444,22 @@ export default {
       marker.data.officialType = this.$refs.officialType.value == 'official' ? 'official' : 'non-official';;
       this.areaData = marker.data;
     },
+
     /**
      * 사용자 등록 위치 조회시 등록한 사진을 가져오는 함수
      * @author Dong-Min Seol
      * @since  2019.08.07
      */
-    getRegisterImages(){ },
+    getRegisterImages(){
+      const URI = `api/map/non-official/image/${this.areaData.SMOKE_SEQ}`
+      let imgList = this.areaImgList;
+      this.$http.get(URI)
+                  .then( data => {
+                      let list = data.data.response.imgList;
+                      list.forEach(el => { imgList.push(el.IMG_SRC) })
+                  })
+                  .catch(error => console.log(error))
+    },
     clearRegisterImages() {
       this.areaImgList.length = 0;
     }
@@ -475,4 +485,3 @@ export default {
 .roadview-popover{ position : absolute; width : 90%; height :90%; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%);}
 #nav-roadview{width:100%; height: 100%; z-index: 9999; position: relative;}
 </style>
-loadSmokeMarker

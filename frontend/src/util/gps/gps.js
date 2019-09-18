@@ -20,9 +20,10 @@ export const getGPSbyHTML = (callback) => {
  */
 export let watchPosition =  (callback) => {
     if(navigator.geolocation) {
-        navigator.geolocation.watchPosition(callback);
+        return navigator.geolocation.watchPosition(callback);
     } else {
         alert('해당 브라우저는 GPS를 지원하지 않습니다.')
+        return null;
     }
 }
 
