@@ -2,9 +2,6 @@
   <f7-page ptr :ptr-mousewheel="true" 
                @page:beforein="loadList" 
                @ptr:refresh="loadList">
-
-               <!-- :infinite-distance="50"
-               :infinite-preloader="false" -->
     <f7-appbar>
       <f7-navbar
           title="최근 등록된 구역" 
@@ -13,23 +10,6 @@
       </f7-navbar>
     </f7-appbar>
     <br>
-<!-- 
-<f7-list-item
-  swipeout
-  link="#"
-  title="Yellow Submarine"
-  after="$15"
-  subtitle="Beatles"
-  text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sagittis tellus ut turpis condimentum, ut dignissim lacus tincidunt. Cras dolor metus, ultrices condimentum sodales sit amet, pharetra sodales eros. Phasellus vel felis tellus. Mauris rutrum ligula nec dapibus feugiat. In vel dui laoreet, commodo augue id, pulvinar lacus."
->
-  <img slot="media" src="https://cdn.framework7.io/placeholder/people-160x160-1.jpg" width="80" />
-
-  <f7-swipeout-actions right>
-      <f7-swipeout-button delete confirm-text="Are you sure you want to delete this item?">Delete</f7-swipeout-button>
-  </f7-swipeout-actions>
-</f7-list-item>
- -->
-
     <f7-list media-list>
       <f7-list-item
         v-for="(item, index) in items"
