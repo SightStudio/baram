@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.FileCopyUtils;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.common.collection.CommonVO;
@@ -17,6 +18,7 @@ import com.common.dao.CommonDaoIF;
 import com.common.service.BaseService;
 import com.common.util.DateMo;
 import com.common.util.RandomMo;
+import com.common.util.aws.AwsS3Mo;
 
 @Service
 public class CommunityServiceImpl extends    BaseService 
@@ -27,6 +29,9 @@ public class CommunityServiceImpl extends    BaseService
 
 	@Value("#{common['FILE_PATH']}")
 	String filePath;
+	
+	@Autowired
+	AwsS3Mo awsS3;
 	
 	/**
 	 * 게시글 목록 조회 로직
@@ -78,6 +83,17 @@ public class CommunityServiceImpl extends    BaseService
 	@Override
 	@Transactional(rollbackFor={Exception.class})
 	public CommonVO registerBBS(CommonVO param) throws Exception {
+		
+		// [rollback] 롤백시 업로드한 이미지 제거
+		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+			@Override
+			public void afterCompletion(int status) {
+				if (status == STATUS_ROLLED_BACK) {
+					log.e("비정상 적인 입력입니다. 롤백 처리되었습니다.");
+	            }
+			};
+		});
+		
 		// [1] 결과 컨테이너 세팅
 		CommonVO result = new CommonVO();
 		
@@ -87,30 +103,23 @@ public class CommunityServiceImpl extends    BaseService
 		// [3] 등록할 이미지 가져오기
 		if(!param.getString("imgListStr").isBlank()) 
 		{
-			String[] imgNameArr = param.getString("imgListStr").split(",");
-			String[] imgTempArr = Stream.of(imgNameArr)
-									     .map(imgName -> String.format("%s/temp/bbs/%s", filePath, imgName))
-									     .toArray(String[]::new);
+			String[] imgTempURLArr = param.getString("imgListStr").split(",");
+			String[] imgOutputArr = 
+					Stream.of(imgTempURLArr)
+					      .map(imgTempPath -> {
+					    	 String [] temp = imgTempPath.split("/");
+				    	     String imgTempFileName = temp[temp.length-1];
+				    	     String destinationPath = String.format("static/userSmoke/%s/%s", param.getString("bbs_seq"), imgTempFileName);
+					    	 return awsS3.moveTo(imgTempPath, destinationPath);  
+					      })
+					      .toArray(String[]::new);
 			
-			String[] imgOutputArr = Stream.of(imgNameArr)
-					 				       .map(imgName -> String.format("/userSmoke/%s/%s", param.getString("bbs_seq"), imgName))
-					 				       .toArray(String[]::new);
-			
-			// [4] 임시 저장했던 파일 해당 폴더로 저장
-			File folder = new File(String.format("%s/userSmoke/%s", filePath, param.getString("bbs_seq")));
-			folder.mkdirs();
-			for(int i = 0 ; i < imgNameArr.length; i++) {
-				File tempFile = new File(imgTempArr[i]);
-				File output   = new File(filePath+imgOutputArr[i]);
-				FileCopyUtils.copy(tempFile , output);
-			}
-			param.put("imgNameList", Arrays.asList(imgNameArr));
+			param.put("imgNameList", Arrays.asList(imgTempURLArr));
 			param.put("imgList"    , Arrays.asList(imgOutputArr));
 			
 			// [5] 사용자 입력 이미지 등록
 			dao.insert("com.app.mapper.community.registerBBSImage", param);
 		}
-		
 		return result;
 	}
 
@@ -132,21 +141,16 @@ public class CommunityServiceImpl extends    BaseService
 		
 		// [2] 파일 가져오기
 		MultipartFile fileInput  = (MultipartFile) param.get("uploadFile");
-		String fileName = DateMo.getYYYYMMDD("_") + RandomMo.getRandomString(10)+ "_" + fileInput.getOriginalFilename();
+		String fileName = DateMo.getYYYYMMDD("_") + RandomMo.getRandomString(20)+ "_" + fileInput.getOriginalFilename();
 		String folder   = filePath + "/temp/bbs/";
-		String path     = folder   + fileName;
 		
 		File folderObj  = new File(folder);
-		File fileOutput = new File(path);
-		
+
 		// [3] 폴더 미존재시 폴더 생성
 		if( !folderObj.exists() ) folderObj.mkdirs();
-
-		FileCopyUtils.copy(fileInput.getBytes(), fileOutput);
-		result.put("fileName", fileName);
 		
-		folderObj  = null;
-		fileOutput = null;
+		String s3UploadedURL = awsS3.upload(fileInput, "static/temp/gmap", fileName);
+		result.put("fileName", s3UploadedURL);
 		return result;
 	}
 
