@@ -20,7 +20,7 @@
   "homepage": "http://framework7.io/vue/",
   "dependencies": {
     "@babel/runtime": "^7.4.4",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-plugin-module-resolver": "^3.2.0",
     "filepond": "^4.4.12",
     "filepond-plugin-file-validate-type": "^1.2.4",
