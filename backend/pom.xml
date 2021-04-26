@@ -27,7 +27,7 @@
 		<app.jackson>2.10.0</app.jackson>
 		<app.ehcache>2.10.6</app.ehcache>
 		<app.jwt.jjwt>0.9.1</app.jwt.jjwt>
-		<app.apache.commons-io>2.6</app.apache.commons-io>
+		<app.apache.commons-io>2.7</app.apache.commons-io>
 		<app.apache.http-client>4.5.10</app.apache.http-client>
 		<app.apache.http-client.core>4.4.12</app.apache.http-client.core>
 		<app.apache.commons-fileupload>1.4</app.apache.commons-fileupload>
