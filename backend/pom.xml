@@ -32,7 +32,7 @@
 		<app.apache.http-client.core>4.4.12</app.apache.http-client.core>
 		<app.apache.commons-fileupload>1.4</app.apache.commons-fileupload>
 		<app.apache.commons-beanutils>1.9.4</app.apache.commons-beanutils>
-		<app.apache.commons-configuration2>2.5</app.apache.commons-configuration2>
+		<app.apache.commons-configuration2>2.8.0</app.apache.commons-configuration2>
 		 
 		<!-- DB -->
 		<db.hikari>3.3.0</db.hikari>
