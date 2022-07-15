@@ -51,7 +51,7 @@
 		<servlet.javax.jstl>1.2</servlet.javax.jstl>
 		
 		<!-- AWS -->
-		<aws.java.sdk>1.11.628</aws.java.sdk>
+		<aws.java.sdk>1.12.261</aws.java.sdk>
 	</properties>
 	
 	<dependencies>
